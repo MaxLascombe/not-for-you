@@ -69,19 +69,25 @@ _Every line is one action. The ☐ is for you to check off. After most steps the
 
 ---
 
-## PART C — iPhone: block reinstalling the app (3 min)
+## PART C — iPhone: block the app from opening (5 min)
 
-**C1. Block app installs.**
-- ☐ C1.1 — Go back to **Settings → Screen Time → Content & Privacy Restrictions**.
-- ☐ C1.2 — Tap **iTunes & App Store Purchases**.
-- ☐ C1.3 — Tap **Installing Apps**.
-- ☐ C1.4 — Tap **Don't Allow**.
-  → You should see: blue checkmark on "Don't Allow."
+_This uses an **App Limit on the Social category** — it blocks Instagram (and other algorithmic feeds) from opening, survives reinstalls, and touches nothing else on your phone. No age restriction, no removing the App Store._
 
-**C2. Verify the App Store is gone.**
-- ☐ C2.1 — Press Home / swipe to home screen, look for the **App Store** icon.
-  → You should see: the App Store icon is **gone** (you can't redownload Instagram). ✅
-  - _Note: to legitimately install an app later, your partner reverses C1.4 to "Allow," then sets it back._
+**C1. Create the limit.**
+- ☐ C1.1 — Go to **Settings → Screen Time → App Limits**.
+- ☐ C1.2 — Tap **Add Limit**.
+- ☐ C1.3 — Tick the **Social** category. _(To target only Instagram instead, expand the category and tick just Instagram — but the whole-category limit is recommended: it auto-catches reinstalls and covers the other feeds you're quitting too.)_
+- ☐ C1.4 — Tap **Next** (top-right).
+- ☐ C1.5 — Set the time to **1 minute**. _(1 min is the minimum Screen Time allows — you'll get a ~60-second sliver per day, then it walls off. Combined with the website block, this is effectively a full block.)_
+- ☐ C1.6 — Turn **ON** the **Block at End of Limit** toggle. ← this is what makes it a hard wall, not a nudge.
+- ☐ C1.7 — Tap **Add**.
+  → You should see: the Social limit listed under App Limits.
+
+**C2. Verify the block.**
+- ☐ C2.1 — If Instagram is installed, open it and use it for a minute.
+  → You should see: a **"Limit Reached"** / time's-up screen. Once Screen Time is locked (Part F), there is **no "Ignore Limit" escape**. ✅
+  - _Note: without removing the App Store, Instagram can still be **downloaded** — but the category limit blocks it from **opening**, even after a reinstall. The website stays blocked separately via Part B._
+  - _Optional stricter add-on: you can also block redownloads entirely via Content & Privacy Restrictions → iTunes & App Store Purchases → Installing Apps → Don't Allow, but that removes the App Store icon for everything. Skip unless you want it._
 
 ---
 
@@ -175,7 +181,7 @@ _Only start this once Parts B, C, D all tested as blocked. This is the step that
   → You should see: it **demands the passcode you don't have**. ✅
 - ☐ F4.2 — Safari → `instagram.com` → blocked. ✅
 - ☐ F4.3 — Chrome → `instagram.com` → blocked. ✅
-- ☐ F4.4 — Home screen → App Store still gone. ✅
+- ☐ F4.4 — Open Instagram (or its App Limit in Settings) → you can't raise/remove the limit without the code, and the app hits the "Limit Reached" wall. ✅
 - ☐ F4.5 — Mac Safari → `instagram.com` → blocked. ✅
 
 If all five show ✅ — **you're done. The off switch now lives with your partner.**
