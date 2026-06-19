@@ -76,7 +76,8 @@ _This uses an **App Limit on the Social category** — it blocks Instagram (and 
 **C1. Create the limit.**
 - ☐ C1.1 — Go to **Settings → Screen Time → App Limits**.
 - ☐ C1.2 — Tap **Add Limit**.
-- ☐ C1.3 — Tick the **Social** category. _(To target only Instagram instead, expand the category and tick just Instagram — but the whole-category limit is recommended: it auto-catches reinstalls and covers the other feeds you're quitting too.)_
+- ☐ C1.3 — Tick the **Social** category. _(The category list is Apple's built-in classification, **not** your installed-apps list — so it shows up and can be selected even if Instagram isn't installed. The limit then auto-applies the moment any social app is downloaded.)_
+  - ⚠️ _Do **not** use the "tick just Instagram" approach: an individual-app limit requires Instagram to be installed to select it, **and** it gets wiped if you delete + reinstall the app. The whole-category limit avoids both problems and covers the other feeds you're quitting too._
 - ☐ C1.4 — Tap **Next** (top-right).
 - ☐ C1.5 — Set the time to **1 minute**. _(1 min is the minimum Screen Time allows — you'll get a ~60-second sliver per day, then it walls off. Combined with the website block, this is effectively a full block.)_
 - ☐ C1.6 — Turn **ON** the **Block at End of Limit** toggle. ← this is what makes it a hard wall, not a nudge.
