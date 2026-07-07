@@ -156,13 +156,15 @@ instagram.com/explore/*
 **D-bis-1.5** — Leave `instagram.com/direct` **out** of the list — that's DMs, and you want it reachable.
   → Test: `instagram.com/direct/inbox` loads (DMs work ✅), `instagram.com/reels` is blocked ✅.
 
-### D-bis-2 — Hide the Home feed (uBlock Origin cosmetic filters)
+### D-bis-2 — Hide the Home feed (cosmetic filters — use AdGuard on Chrome)
 
-_Use full **uBlock Origin** here (not the Lite you may have in Part D) — Lite can't do custom cosmetic filters. On Chrome, install "uBlock Origin Lite" is default now, so grab the classic **uBlock Origin** if still available, or use **AdGuard** which supports the same syntax._
+_**Which extension:** on **Chrome**, use **AdGuard** (free browser extension). Chrome finished phasing out Manifest V2, so classic **uBlock Origin** no longer runs there, and the MV3 **uBlock Origin Lite** that replaced it **can't do custom cosmetic filters** — useless for this. AdGuard is MV3, actively maintained, and supports the element-hiding syntax below. **On Firefox instead?** Use classic **uBlock Origin** — it's the best tool for this and the rules are identical._
 
-**D-bis-2.1** — Open the extension's **Dashboard** → **My filters** tab.
+**D-bis-2.1** — In Chrome, install the **AdGuard AdBlocker** extension from the Chrome Web Store. (You do **not** need the paid AdGuard desktop app — the free extension is enough.)
 
-**D-bis-2.2** — Paste these rules:
+**D-bis-2.2** — Click the AdGuard icon → the **gear/Settings** → **Extension settings** → **User rules** (the "My filters" equivalent).
+
+**D-bis-2.3** — Paste these rules:
 ```
 ! Hide Instagram home feed but keep the rest of the UI
 www.instagram.com##main[role="main"] > div:has(article)
@@ -170,8 +172,9 @@ www.instagram.com##main[role="main"] > div:has(article)
 www.instagram.com##a[href="/explore/"]
 www.instagram.com##a[href^="/reels/"]
 ```
+_(This is standard Adblock cosmetic syntax — the same rules work verbatim in uBlock Origin on Firefox.)_
 
-**D-bis-2.3** — Click **Apply changes**.
+**D-bis-2.4** — Save / apply the rules.
   → Test: open `instagram.com` — the scrolling feed is gone, DMs/search/profile still work. (Instagram changes its markup often; if the feed reappears, the `article` selector may need a tweak — that's the nature of cosmetic filters.)
 
 ### D-bis-3 — (Optional) Make it harder to disable (force-install policy)
