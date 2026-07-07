@@ -129,6 +129,74 @@ _This uses an **App Limit on the Social category** — it blocks Instagram (and 
 
 ---
 
+## PART D-bis — Surgical block: kill the feed, keep DMs (Chrome, 10 min)
+
+_Parts B–D are all-or-nothing walls. This part is a **scalpel** — it removes only the algorithmic surface (Home feed, Reels, Explore) while leaving Instagram DMs reachable. That matches the actual goal ("quit **algorithmic feeds**"), and it removes the biggest reason you'd ever be tempted to unlock the wall: needing to reach a message._
+
+**Honest framing:** a Chrome extension is the **weakest layer as a lock** — it's two clicks to disable at `chrome://extensions` and it only covers Chrome. Do NOT treat this as the wall. The wall is Parts B–F (partner-locked, VPN-proof, all browsers). This is a day-to-day quality-of-life layer on top. D2 below adds an optional friction lock so it isn't a one-click undo.
+
+Pick **one** of D-bis-1 (path blocking) or D-bis-2 (feed hiding) — or run both.
+
+### D-bis-1 — Block Reels/Explore by URL path (LeechBlock NG)
+
+**D-bis-1.1** — In Chrome, install **LeechBlock NG** from the Chrome Web Store.
+
+**D-bis-1.2** — Click the LeechBlock icon → **Options** → open **Block Set 1**.
+
+**D-bis-1.3** — In the **"Sites to block"** box, add these (one per line):
+```
+instagram.com/reels
+instagram.com/explore
+instagram.com/reels/*
+instagram.com/explore/*
+```
+
+**D-bis-1.4** — In **"When to block"**, set it to block **all day** (leave the time fields at 0000–2400, all days ticked).
+
+**D-bis-1.5** — Leave `instagram.com/direct` **out** of the list — that's DMs, and you want it reachable.
+  → Test: `instagram.com/direct/inbox` loads (DMs work ✅), `instagram.com/reels` is blocked ✅.
+
+### D-bis-2 — Hide the Home feed (uBlock Origin cosmetic filters)
+
+_Use full **uBlock Origin** here (not the Lite you may have in Part D) — Lite can't do custom cosmetic filters. On Chrome, install "uBlock Origin Lite" is default now, so grab the classic **uBlock Origin** if still available, or use **AdGuard** which supports the same syntax._
+
+**D-bis-2.1** — Open the extension's **Dashboard** → **My filters** tab.
+
+**D-bis-2.2** — Paste these rules:
+```
+! Hide Instagram home feed but keep the rest of the UI
+www.instagram.com##main[role="main"] > div:has(article)
+! Hide Reels & Explore entry points in the nav
+www.instagram.com##a[href="/explore/"]
+www.instagram.com##a[href^="/reels/"]
+```
+
+**D-bis-2.3** — Click **Apply changes**.
+  → Test: open `instagram.com` — the scrolling feed is gone, DMs/search/profile still work. (Instagram changes its markup often; if the feed reappears, the `article` selector may need a tweak — that's the nature of cosmetic filters.)
+
+### D-bis-3 — (Optional) Make it harder to disable (force-install policy)
+
+_This greys out the extension's remove/disable button so you can't kill it on impulse. It's **friction, not a wall** — as admin on your own Mac you can still delete the policy file — but it raises the effort from one click to "find and delete a plist."_
+
+**D-bis-3.1** — Get the extension's **ID** from `chrome://extensions` (toggle **Developer mode** on to see the 32-character ID under each extension).
+
+**D-bis-3.2** — In Terminal, create the managed-policy folder:
+```
+sudo mkdir -p /Library/Managed\ Preferences
+```
+
+**D-bis-3.3** — Create the Chrome policy with the extension force-installed (replace `EXTENSION_ID`):
+```
+sudo defaults write com.google.Chrome ExtensionInstallForcelist -array-add "EXTENSION_ID;https://clients2.google.com/service/update2/crx"
+```
+
+**D-bis-3.4** — Fully quit and reopen Chrome. At `chrome://extensions` the extension now shows **"Installed by your organization"** and the remove button is gone.
+  → To undo (if you ever legitimately need to): `sudo defaults delete com.google.Chrome ExtensionInstallForcelist` and restart Chrome. Because *you* can run that, this layer is friction — the partner-locked Screen Time block in Parts B–F remains the real lock.
+
+**Bottom line:** run D-bis as your everyday layer (feed dead, DMs alive) and keep Parts B–F as the hard, partner-held wall behind it.
+
+---
+
 ## PART E — NextDNS redundant layer (10 min, optional but recommended)
 
 _Catches app/API traffic and works on cellular. Free up to 300k queries/month._
