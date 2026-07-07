@@ -113,7 +113,7 @@ _This uses an **App Limit on the Social category** — it blocks Instagram (and 
 - ☐ D3.1 — Open **Safari** → `instagram.com`.
   → You should see: blocked. ✅
 - ☐ D3.2 — Open **Chrome** (if installed) → `instagram.com`.
-  → You should see: blocked. ✅
+  → ⚠️ **Expect this to STILL LOAD.** Unlike on iPhone, macOS Screen Time's web filter is only reliably enforced in **Safari / WebKit apps** — **Chrome and Firefox use their own network stack and ignore it.** That's not a mistake in your setup; it's a macOS limitation. **Do D5 below to block Chrome.**
 
 **D4. (Optional) hosts-file backstop on the Mac.**
 - ☐ D4.1 — Open **Terminal** (Cmd+Space, type "Terminal", Enter).
@@ -126,6 +126,30 @@ _This uses an **App Limit on the Social category** — it blocks Instagram (and 
 - ☐ D4.4 — Save: press **Ctrl+O**, then **Enter**. Exit: **Ctrl+X**.
 - ☐ D4.5 — Type: `sudo dscacheutil -flushcache` and press Enter (clears DNS cache).
   → You should see: back to the normal Terminal prompt, no errors.
+- ☐ D4.6 — ⚠️ **Chrome gotcha:** if Chrome's **Secure DNS** is on, Chrome does DNS-over-HTTPS and **bypasses `/etc/hosts` entirely**, so this backstop won't bite in Chrome. Turn it off: Chrome → `chrome://settings/security` → **Use secure DNS** → **OFF** (or set it to your NextDNS resolver). Safari/other apps still honor the hosts file regardless.
+
+**D5. Block Instagram in Chrome on the Mac (URLBlocklist).**
+_This is the real Chrome fix — a Chrome-native policy that shows a proper "blocked by your administrator" page. It's what D3.2 can't do._
+- ☐ D5.1 — Open **Terminal**. Paste this and press Enter:
+  ```
+  defaults write com.google.Chrome URLBlocklist -array \
+    "instagram.com" \
+    "*://*.instagram.com/*"
+  ```
+- ☐ D5.2 — **Fully quit Chrome** (Cmd-Q) and reopen it.
+- ☐ D5.3 — Verify: go to `chrome://policy` → you should see **URLBlocklist** listed (click **Reload policies** if not).
+- ☐ D5.4 — Test: Chrome → `instagram.com`.
+  → You should see: **blocked** — `ERR_BLOCKED_BY_ADMINISTRATOR`. ✅
+- ☐ D5.5 — _To undo later (legitimately):_ `defaults delete com.google.Chrome URLBlocklist`, then restart Chrome.
+- ☐ D5.6 — **(Optional) Make it un-toggleable in Chrome's UI** — same friction-lock idea as D-bis-3. Write it as a *mandatory managed policy* instead of a user preference:
+  ```
+  sudo defaults write /Library/Managed\ Preferences/com.google.Chrome URLBlocklist -array \
+    "instagram.com" \
+    "*://*.instagram.com/*"
+  ```
+  Restart Chrome. Now `chrome://policy` shows it as enforced and you can't remove it from Chrome — only by deleting that plist as admin (friction, not a partner-locked wall; Parts B–F remain the real lock).
+
+_Firefox note: if you also use Firefox, it ignores both Screen Time and Chrome policy. Block it with the AdGuard/uBlock network rule (D-bis) or rely on NextDNS (Part E)._
 
 ---
 
@@ -263,7 +287,9 @@ If all five show ✅ — **you're done. The off switch now lives with your partn
 ## Quick troubleshooting
 
 - **Website not blocked after B5?** The entries are probably under "Always Allow" instead of "Never Allow." Re-do B4–B5.
-- **Block works in Safari but not Chrome?** Make sure Content & Privacy Restrictions (B2.2) is actually ON — the Web Content filter is system-wide and covers all browsers only when restrictions are on.
+- **Block works in Safari but not Chrome?**
+  - **On iPhone:** the Web Content filter is system-wide there — make sure Content & Privacy Restrictions (B2.2) is actually ON; that covers all browsers.
+  - **On Mac:** this is *expected* — macOS Screen Time only filters Safari/WebKit, not Chrome. That's what **D5** (Chrome URLBlocklist) is for. If Chrome still loads Instagram after D5, quit Chrome fully (Cmd-Q) and check `chrome://policy` shows URLBlocklist.
 - **Forgot to test before locking and something's broken?** Your partner unlocks with the code, you fix it, they re-lock. (This is exactly why F comes last.)
 - **NextDNS stopped filtering?** You may have hit the 300k/month free cap — it resets monthly; Screen Time still holds regardless.
 
