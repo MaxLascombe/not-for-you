@@ -201,3 +201,66 @@ If all five show ✅ — **you're done. The off switch now lives with your partn
 ## The one honest limitation
 
 Everything here is solid **except** the human link: if you persuade your partner to give you the code, it's all undone in 30 seconds. The technology is genuinely hard to beat now — the website block even survives a VPN. The weak point is the conversation at midnight. Choose a partner who will say **no**.
+
+---
+
+## Appendix — The Nuclear Option (supervised iPhone + locked DNS)
+
+This is the free-but-heavy path for when Parts A–F aren't enough — when you want the DNS block to be **impossible to toggle off in Settings** and the whole profile **impossible to delete without a password your partner holds**. It's what an employer or school does to a managed phone, applied to yourself as a commitment device.
+
+**The cost is real:** supervising a phone **erases it** (full wipe + restore), and you'll set it up from a Mac using Apple's free tools. Do this only if the Screen Time lock in Parts A–F has proven too easy to talk your way around.
+
+### What supervision buys you that Screen Time can't
+
+| Capability | Screen Time (Parts A–F) | Supervised profile (this appendix) |
+|---|---|---|
+| Block instagram.com | ✅ (VPN-proof) | ✅ |
+| Block the app's APIs via DNS | ⚠️ DNS is toggleable in Settings | ✅ **DNS off-switch greyed out** ("Prohibit Disablement") |
+| Stop profile removal | ❌ | ✅ **Non-removable / password-protected removal** |
+| Survive "Reset Network Settings" | ❌ | ✅ (Restrictions can disable erase) |
+| Undo path | Partner-held passcode | Partner-held **removal password** + wipe |
+
+### What you need (all free)
+
+- A **Mac** (you have one).
+- **Apple Configurator** — free on the Mac App Store.
+- **iMazing Profile Editor** (free) or **Apple Configurator's** own profile editor — to build the DNS payload with the "Prohibit Disablement" flag.
+- A **NextDNS** config (from Part E) — you'll reuse its config ID.
+- ~45–60 min and willingness to wipe/restore the iPhone once.
+
+### Step 1 — Supervise the iPhone (this wipes it)
+
+1. Back up the iPhone first (iCloud or Finder) — supervision **erases** it.
+2. On the Mac, open **Apple Configurator** → connect the iPhone by cable.
+3. Right-click the device → **Prepare** → choose **Manual** enrollment, **Do not enroll in MDM**, and tick **Supervise devices**.
+4. Let it erase and reprovision. Restore your backup afterward.
+5. The phone is now **supervised** — you'll see "This iPhone is supervised and managed by…" in Settings → General → VPN & Device Management.
+
+### Step 2 — Build the locked DNS profile
+
+In **iMazing Profile Editor** (easier than raw Configurator for this):
+
+1. Add a **DNS Settings** (DNS-over-HTTPS/TLS) payload → paste your **NextDNS DoH URL** (NextDNS gives you a `https://dns.nextdns.io/<yourid>` endpoint and a ready-made `.mobileconfig`).
+2. Turn ON **"Prohibit Disablement"** in the DNS payload — this is the flag that **greys out the DNS off-switch** in Settings so you can't just flip it off.
+3. Add a **Restrictions** payload and disable:
+   - **Allow Erase All Content and Settings** → OFF (blocks the factory-reset escape from the phone itself).
+   - **Allow adding VPN configurations** → OFF (stops a rogue VPN from re-routing around DNS).
+   - Optionally **Allow modifying account settings / installing configuration profiles** → OFF.
+4. In the profile's **General** payload, set **Security → When removing profile** to **"With Authorization"** and set a **removal password** — **your partner types this; you never see it.** Now the profile can't be deleted without their password.
+
+### Step 3 — Install and lock
+
+1. Save the `.mobileconfig` and install it on the supervised iPhone (AirDrop or Configurator push).
+2. Verify: Settings → General → VPN & Device Management → the profile shows as **installed and non-removable** (removal demands the password).
+3. Verify the DNS off-switch: Settings → General → **VPN, DNS & Device Management → DNS** → the toggle is **greyed out**. ✅
+4. Verify the block: turn Wi-Fi off (cellular only), open the Instagram app if installed and Safari → both should fail to load Instagram. ✅
+
+### The residual holes (be honest with yourself)
+
+- **DFU restore from a computer still wipes supervision.** Disabling "Erase All Content and Settings" only closes the *on-device* reset. A cabled DFU restore from a Mac can strip everything. To close this too you'd need **Apple Business Manager** (turns supervision into MDM-locked ownership that survives DFU) — that's beyond a free personal setup. **Mitigation:** keep **Activation Lock** on under **your partner's Apple ID**, so a wiped phone demands *their* credentials to reactivate.
+- **Known NextDNS bug:** there have been reports that combining NextDNS's `.mobileconfig` with **"Prohibit Disablement"** can make the profile fail to load or the DNS not apply on some iOS versions. If DNS silently stops working, test with the flag off first, then re-enable — or use a plain DoH profile pointed at your NextDNS endpoint rather than NextDNS's pre-baked file.
+- **The human link is still the real lock.** Even here, if your partner hands over the removal password, it's over in a minute. Supervision raises the effort from "tap a toggle" to "wipe and rebuild the phone" — that gap is the whole point.
+
+### When to actually do this
+
+Parts A–F stop impulse use and survive a VPN. Reach for this appendix **only** if you've caught yourself flipping the NextDNS toggle off in Settings, or deleting the Screen Time / DNS profile, to sneak back in. Supervision removes those toggles from your reach entirely. It's the difference between a locked door and a welded one — most people never need the weld.
