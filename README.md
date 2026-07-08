@@ -1,363 +1,295 @@
-# Instagram Block — Granular Step-by-Step Guide
+# Quitting Instagram — the setup that actually holds
 
-_Every line is one action. The ☐ is for you to check off. After most steps there's an **→ You should see:** so you know it worked before moving on._
-
-**Before you start:**
-- Have your iPhone and Mac in front of you.
-- Have your **accountability partner** reachable for **PART F** (the final lock). Do Parts A–E alone.
-- Total time: ~30–45 min.
-
-> ⚠️ **Golden rule:** Do NOT set any passcode until PART F. You configure and test everything first. If you lock too early and something's wrong, you'll be stuck.
+A free, self-binding block for Instagram (website + app) on iPhone and Mac. Built as a **commitment device**: the goal isn't just to block Instagram, it's to make it genuinely hard for **future-you at midnight** to unblock it.
 
 ---
 
-## PART A — Prep (5 min)
+## The mental model (read this first)
 
-**A1. Confirm Find My is on (this is what blocks USB unlock tools).**
-- ☐ A1.1 — Open **Settings** on iPhone.
-- ☐ A1.2 — Tap your **name** at the very top.
-- ☐ A1.3 — Tap **Find My**.
-- ☐ A1.4 — Tap **Find My iPhone**.
-- ☐ A1.5 — Confirm the top toggle **Find My iPhone** is **green/ON**. If off, turn it on.
+Two facts drive the whole design:
+
+1. **Your iPhone is where the addiction lives.** It's in your pocket, your bed, your idle moments — that's where nearly all the relapse risk is. The Mac is *deliberate* use (you have to sit down and open a browser), so it's a much smaller risk.
+2. **iOS and macOS aren't equal.** iOS has one clean, broad, **partner-lockable** website block that covers every browser and survives a VPN. macOS has nothing that strong for free — which is why the Mac side is friction, not a fortress. Don't fight that; work with it.
+
+So the strategy is two tiers:
+
+| | **Tier 1 — iPhone** | **Tier 2 — Mac** |
+|---|---|---|
+| Role | **The real lock** | **Friction, not a fortress** |
+| How | Screen Time website + app block, **locked by your partner** | NextDNS (covers all browsers + the app) + Safari block |
+| Undo-resistance | Hard — needs a passcode you don't have | Soft — you *can* undo it, but it's annoying enough to stop impulse |
+
+And the one truth no tool changes: **the real lock is your accountability partner.** Every free layer is undoable by someone with admin rights to their own devices. The thing that actually holds is a person who won't hand you the passcode. Pick that person well — everything else is drywall around that one load-bearing wall.
+
+> ⚠️ **Golden rule:** don't set or lock any passcode until the very end (Part 6). Configure and **test** everything first. If you lock too early and something's broken, you're stuck.
+
+**You'll need:** ~30–40 min, your iPhone, your Mac, and your **partner reachable** for Part 6 (the final lock).
+
+---
+
+# TIER 1 — iPhone: the real lock
+
+## Part 1 — Prep (5 min)
+
+**1.1 Confirm Find My is on** (this is what blocks USB unlock tools).
+- ☐ Settings → tap your **name** → **Find My** → **Find My iPhone** → confirm the top toggle is **green/ON**.
   → You should see: "Find My iPhone: On".
 
-**A2. Confirm the Instagram app is deleted.**
-- ☐ A2.1 — Swipe down on the home screen to open search, type "Instagram".
-- ☐ A2.2 — If the app appears, press and hold it → **Remove App** → **Delete App** → **Delete**.
-  → You should see: no Instagram app remaining (search shows only the App Store result).
+**1.2 Confirm the Instagram app is deleted.**
+- ☐ Swipe down, search "Instagram". If the app appears, press and hold → **Remove App** → **Delete App** → **Delete**.
+  → You should see: no Instagram app left (only the App Store result).
 
 ---
 
-## PART B — iPhone: block the website (10 min) ⭐ most important part
+## Part 2 — Block the website ⭐ the single most important step
 
-**B1. Open Screen Time.**
-- ☐ B1.1 — Open **Settings**.
-- ☐ B1.2 — Scroll down, tap **Screen Time** (hourglass icon).
-- ☐ B1.3 — If you see a button **Turn On Screen Time**, tap it, then tap **Continue** / **This is My iPhone**. (Do NOT set a passcode if asked — skip/cancel that for now.)
-  → You should see: the Screen Time menu with options like "App Limits," "Content & Privacy Restrictions."
+_This is the winner: one setting blocks Instagram in **every browser at once**, it's **VPN-proof**, and it's the one thing you can **partner-lock**._
 
-**B2. Turn on restrictions.**
-- ☐ B2.1 — Tap **Content & Privacy Restrictions**.
-- ☐ B2.2 — Tap the top toggle **Content & Privacy Restrictions** to **green/ON**.
-  → You should see: the list below becomes tappable (no longer greyed out).
+**2.1 Open Screen Time.**
+- ☐ Settings → **Screen Time**. If you see **Turn On Screen Time**, tap it → **Continue** → **This is My iPhone**. (Do NOT set a passcode if asked — skip it for now.)
 
-**B3. Open Web Content.**
-- ☐ B3.1 — Tap **Content Restrictions**.
-- ☐ B3.2 — Tap **Web Content**.
-  → You should see: three options — Unrestricted Access / Limit Adult Websites / Allowed Websites Only.
+**2.2 Turn on restrictions.**
+- ☐ Tap **Content & Privacy Restrictions** → toggle the top switch **green/ON**.
+  → You should see: the list below stops being greyed out.
 
-**B4. Switch to Limit Adult Websites (this unlocks the Never Allow list).**
-- ☐ B4.1 — Tap **Limit Adult Websites**.
-  → You should see: a blue checkmark next to it, and two new sections appear: **ALWAYS ALLOW** and **NEVER ALLOW**.
+**2.3 Open Web Content.**
+- ☐ Tap **Content Restrictions** → **Web Content**.
+  → You should see: Unrestricted Access / **Limit Adult Websites** / Allowed Websites Only.
 
-**B5. Add Instagram to Never Allow.**
-- ☐ B5.1 — Under **NEVER ALLOW**, tap **Add Website**.
-- ☐ B5.2 — Type: `https://www.instagram.com`
-- ☐ B5.3 — Tap **Done** (keyboard) / back arrow to save.
-  → You should see: `www.instagram.com` listed under NEVER ALLOW.
-- ☐ B5.4 — Tap **Add Website** again.
-- ☐ B5.5 — Type: `https://instagram.com`
-- ☐ B5.6 — Tap **Done** to save.
+**2.4 Switch to Limit Adult Websites** (this unlocks the Never Allow list).
+- ☐ Tap **Limit Adult Websites**.
+  → You should see: a checkmark, plus new **ALWAYS ALLOW** and **NEVER ALLOW** sections.
+
+**2.5 Add Instagram to NEVER ALLOW.**
+- ☐ Under **NEVER ALLOW** → **Add Website** → type `https://www.instagram.com` → save.
+- ☐ **Add Website** again → type `https://instagram.com` → save.
   → You should see: both entries under NEVER ALLOW.
 
-**B6. TEST IT NOW (before anything is locked).**
-- ☐ B6.1 — Open **Safari**, type `instagram.com`, go.
-  → You should see: "You cannot browse this page" / a blocked/restricted message. ✅
-- ☐ B6.2 — If you have **Chrome**, open it, try `instagram.com`.
-  → You should see: also blocked (the block covers every browser). ✅
-- ☐ B6.3 — If it is NOT blocked: go back to B4–B5 and re-check the entries are under NEVER ALLOW (not Always Allow).
+**2.6 TEST IT NOW** (before anything is locked).
+- ☐ Safari → `instagram.com` → **blocked** ("You cannot browse this page"). ✅
+- ☐ Any other browser (Chrome, Arc) → `instagram.com` → **also blocked** (the filter is system-wide). ✅
+- ☐ If it loads: re-check Part 2.5 — the entries must be under **NEVER ALLOW**, not Always Allow.
 
 ---
 
-## PART C — iPhone: block the app from opening (5 min)
+## Part 3 — Block the app from opening (5 min)
 
-_This uses an **App Limit on the Social category** — it blocks Instagram (and other algorithmic feeds) from opening, survives reinstalls, and touches nothing else on your phone. No age restriction, no removing the App Store._
+_Uses an **App Limit on the Social category** — blocks Instagram (and other feeds) from opening, survives reinstalls, needs no age restriction, and doesn't remove the App Store._
 
-**C1. Create the limit.**
-- ☐ C1.1 — Go to **Settings → Screen Time → App Limits**.
-- ☐ C1.2 — Tap **Add Limit**.
-- ☐ C1.3 — Tick the **Social** category. _(The category list is Apple's built-in classification, **not** your installed-apps list — so it shows up and can be selected even if Instagram isn't installed. The limit then auto-applies the moment any social app is downloaded.)_
-  - ⚠️ _Do **not** use the "tick just Instagram" approach: an individual-app limit requires Instagram to be installed to select it, **and** it gets wiped if you delete + reinstall the app. The whole-category limit avoids both problems and covers the other feeds you're quitting too._
-- ☐ C1.4 — Tap **Next** (top-right).
-- ☐ C1.5 — Set the time to **1 minute**. _(1 min is the minimum Screen Time allows — you'll get a ~60-second sliver per day, then it walls off. Combined with the website block, this is effectively a full block.)_
-- ☐ C1.6 — Turn **ON** the **Block at End of Limit** toggle. ← this is what makes it a hard wall, not a nudge.
-- ☐ C1.7 — Tap **Add**.
-  → You should see: the Social limit listed under App Limits.
+**3.1 Create the limit.**
+- ☐ Settings → Screen Time → **App Limits** → **Add Limit**.
+- ☐ Tick the **Social** category.
+  _The category list is Apple's built-in classification, **not** your installed-apps list — so it's selectable even with Instagram uninstalled, and it auto-applies the moment any social app is downloaded._
+  ⚠️ _Don't use the "tick just Instagram" approach — an individual-app limit needs the app installed to select it **and** gets wiped on reinstall. The category limit avoids both._
+- ☐ **Next** → set the time to **1 minute** (the minimum) → turn **ON** **Block at End of Limit** ← this makes it a wall, not a nudge → **Add**.
+  → You should see: the Social limit under App Limits.
 
-**C2. Verify the block.**
-- ☐ C2.1 — If Instagram is installed, open it and use it for a minute.
-  → You should see: a **"Limit Reached"** / time's-up screen. Once Screen Time is locked (Part F), there is **no "Ignore Limit" escape**. ✅
-  - _Note: without removing the App Store, Instagram can still be **downloaded** — but the category limit blocks it from **opening**, even after a reinstall. The website stays blocked separately via Part B._
-  - _Optional stricter add-on: you can also block redownloads entirely via Content & Privacy Restrictions → iTunes & App Store Purchases → Installing Apps → Don't Allow, but that removes the App Store icon for everything. Skip unless you want it._
+**3.2 Verify.**
+- ☐ If Instagram is installed, open it for a minute → you hit a **"Limit Reached"** screen. Once locked (Part 6) there's **no "Ignore Limit" escape**. ✅
+  _The app can still be **downloaded**, but the category limit blocks it from **opening**, even after reinstall. The website stays blocked separately via Part 2._
 
 ---
 
-## PART D — Mac: block the website (8 min)
+# TIER 2 — Mac: friction, not a fortress
 
-**D1. Open Screen Time on the Mac.**
-- ☐ D1.1 — Click the **Apple menu** () top-left → **System Settings**.
-- ☐ D1.2 — In the sidebar, click **Screen Time**. (Sign in with the **same Apple ID** as your iPhone if prompted.)
-- ☐ D1.3 — If Screen Time is off, click **Turn On Screen Time**. (No passcode yet.)
+_The Mac can't be locked as hard as the iPhone for free — and it doesn't need to be. The goal here is enough friction that you don't drift into Instagram, not a perfect wall. **NextDNS does the broad work in one shot; the Safari block is a partner-lockable bonus.**_
 
-**D2. Block instagram.com.**
-- ☐ D2.1 — Click **Content & Privacy**.
-- ☐ D2.2 — Toggle **Content & Privacy** to **ON**.
-- ☐ D2.3 — Click **Content Restrictions** (or **Store, App, & Web** depending on version) → find **Web Content** / **Access to Web Content**.
-- ☐ D2.4 — Set it to **Limit Adult Websites**.
-- ☐ D2.5 — Click **Customize…** (or the **Restricted** "+" button).
-- ☐ D2.6 — Under **Restricted**, click **+** and add `https://www.instagram.com`, then `https://instagram.com`.
-- ☐ D2.7 — Click **Done**.
-  → You should see: both URLs in the Restricted list.
+## Part 4 — NextDNS: one block for every browser + the app (10 min) ⭐ primary Mac layer
 
-**D3. Test on the Mac.**
-- ☐ D3.1 — Open **Safari** → `instagram.com`.
-  → You should see: blocked. ✅
-- ☐ D3.2 — Open **Chrome** (if installed) → `instagram.com`.
-  → ⚠️ **Expect this to STILL LOAD.** Unlike on iPhone, macOS Screen Time's web filter is only reliably enforced in **Safari / WebKit apps** — **Chrome and Firefox use their own network stack and ignore it.** That's not a mistake in your setup; it's a macOS limitation. **Do D5 below to block Chrome.**
+_This is the fix for the whack-a-mole problem. DNS resolution happens **below** the browser, at the OS level — so blocking Instagram here catches Safari, Chrome, Arc, Firefox, and the app's APIs **all at once**, with nothing to repeat per browser. Free up to 300k queries/month._
 
-**D4. (Optional) hosts-file backstop on the Mac.**
-- ☐ D4.1 — Open **Terminal** (Cmd+Space, type "Terminal", Enter).
-- ☐ D4.2 — Type: `sudo nano /etc/hosts` and press Enter. Enter your Mac password (cursor won't move — that's normal), press Enter.
-- ☐ D4.3 — Use arrow keys to go to the bottom, add these two lines:
-  ```
-  127.0.0.1 instagram.com
-  127.0.0.1 www.instagram.com
-  ```
-- ☐ D4.4 — Save: press **Ctrl+O**, then **Enter**. Exit: **Ctrl+X**.
-- ☐ D4.5 — Type: `sudo dscacheutil -flushcache` and press Enter (clears DNS cache).
-  → You should see: back to the normal Terminal prompt, no errors.
-- ☐ D4.6 — ⚠️ **Chrome gotcha:** if Chrome's **Secure DNS** is on, Chrome does DNS-over-HTTPS and **bypasses `/etc/hosts` entirely**, so this backstop won't bite in Chrome. Turn it off: Chrome → `chrome://settings/security` → **Use secure DNS** → **OFF** (or set it to your NextDNS resolver). Safari/other apps still honor the hosts file regardless.
+**4.1 Create the account.**
+- ☐ On the Mac, go to **nextdns.io** → **Try it now / Sign up** (free) → note your **Configuration ID** and your **DoH URL** (looks like `https://dns.nextdns.io/abc123`).
 
-**D5. Block Instagram in Chrome on the Mac (URLBlocklist).**
-_This is the real Chrome fix — a Chrome-native policy that shows a proper "blocked by your administrator" page. It's what D3.2 can't do._
-- ☐ D5.1 — Open **Terminal**. Paste this and press Enter:
-  ```
-  defaults write com.google.Chrome URLBlocklist -array \
-    "instagram.com" \
-    "*://*.instagram.com/*"
-  ```
-- ☐ D5.2 — **Fully quit Chrome** (Cmd-Q) and reopen it.
-- ☐ D5.3 — Verify: go to `chrome://policy` → you should see **URLBlocklist** listed (click **Reload policies** if not).
-- ☐ D5.4 — Test: Chrome → `instagram.com`.
-  → You should see: **blocked** — `ERR_BLOCKED_BY_ADMINISTRATOR`. ✅
-- ☐ D5.5 — _To undo later (legitimately):_ `defaults delete com.google.Chrome URLBlocklist`, then restart Chrome.
-- ☐ D5.6 — **(Optional) Make it un-toggleable in Chrome's UI** — same friction-lock idea as D-bis-3. Write it as a *mandatory managed policy* instead of a user preference:
-  ```
-  sudo defaults write /Library/Managed\ Preferences/com.google.Chrome URLBlocklist -array \
-    "instagram.com" \
-    "*://*.instagram.com/*"
-  ```
-  Restart Chrome. Now `chrome://policy` shows it as enforced and you can't remove it from Chrome — only by deleting that plist as admin (friction, not a partner-locked wall; Parts B–F remain the real lock).
+**4.2 Add Instagram to the denylist.**
+- ☐ Dashboard → **Denylist** → add each (Instagram-only, so your messaging apps keep working):
+  `instagram.com`, `www.instagram.com`, `i.instagram.com`, `api.instagram.com`, `graph.instagram.com`, `platform.instagram.com`, `cdninstagram.com`
+  ⚠️ _Do **not** add `fbcdn.net` — it's shared Meta infrastructure used by Messenger/WhatsApp._
+- ☐ **Settings** tab → turn ON **Block bypass methods**.
 
-_Firefox note: if you also use Firefox, it ignores both Screen Time and Chrome policy. Block it with the AdGuard/uBlock network rule (D-bis) or rely on NextDNS (Part E)._
+**4.3 Make the Mac use NextDNS system-wide.**
+- ☐ On the NextDNS Setup page → follow **Apple → macOS** → install the configuration profile (**System Settings → General → Device Management → Install**). Now every app resolves DNS through NextDNS.
+
+**4.4 Close the one hole — browser Secure DNS.**
+_A browser's own **Secure DNS** (DNS-over-HTTPS) can skip the system resolver and defeat the block. Point each browser you actually use at NextDNS so it can't route around it — this keeps the privacy benefit AND enforces the filter._
+- ☐ **Arc:** Settings → Privacy → **Secure DNS → Custom** → paste your NextDNS **DoH URL**.
+- ☐ **Chrome / other Chromium:** `chrome://settings/security` → Use secure DNS → **Custom** → paste the DoH URL.
+- ☐ (Only bother with browsers you actually open — you don't need to chase every one.)
+
+**4.5 Test.**
+- ☐ In Arc (and Safari) → `instagram.com` → **blocked / won't load**. ✅
+- ☐ Bonus: install the NextDNS profile on the **iPhone** too (NextDNS Setup → iOS profile) — it adds app/API blocking on **cellular**. The iPhone's real lock is still Part 2; this is extra.
 
 ---
 
-## PART D-bis — Surgical block: kill the feed, keep DMs (Chrome, 10 min)
+## Part 5 — Safari website block (partner-lockable bonus, 5 min)
 
-_Parts B–D are all-or-nothing walls. This part is a **scalpel** — it removes only the algorithmic surface (Home feed, Reels, Explore) while leaving Instagram DMs reachable. That matches the actual goal ("quit **algorithmic feeds**"), and it removes the biggest reason you'd ever be tempted to unlock the wall: needing to reach a message._
+_Screen Time on the Mac only filters **Safari/WebKit**, not Chrome/Arc (that's why Part 4 exists). But it's still worth doing, because — unlike NextDNS — it can be **partner-locked** in Part 6._
 
-**Honest framing:** a Chrome extension is the **weakest layer as a lock** — it's two clicks to disable at `chrome://extensions` and it only covers Chrome. Do NOT treat this as the wall. The wall is Parts B–F (partner-locked, VPN-proof, all browsers). This is a day-to-day quality-of-life layer on top. D2 below adds an optional friction lock so it isn't a one-click undo.
+**5.1** — Apple menu → **System Settings** → **Screen Time** (same Apple ID as iPhone). If off, **Turn On Screen Time** (no passcode yet).
 
-Pick **one** of D-bis-1 (path blocking) or D-bis-2 (feed hiding) — or run both.
+**5.2** — **Content & Privacy** → toggle **ON** → **Content Restrictions** → **Web Content** → **Limit Adult Websites** → **Customize…** → under **Restricted**, add `https://www.instagram.com` and `https://instagram.com` → **Done**.
 
-### D-bis-1 — Block Reels/Explore by URL path (LeechBlock NG)
+**5.3** — Test: **Safari** → `instagram.com` → **blocked**. ✅ (Chrome/Arc are handled by Part 4, not this.)
 
-**D-bis-1.1** — In Chrome, install **LeechBlock NG** from the Chrome Web Store.
+---
 
-**D-bis-1.2** — Click the LeechBlock icon → **Options** → open **Block Set 1**.
+# Part 6 — Hand the keys to your partner 🔒 do this LAST
 
-**D-bis-1.3** — In the **"Sites to block"** box, add these (one per line):
+_Only start once Tiers 1 and 2 are tested and working. **This is the step that makes it self-binding.** Your partner does the typing; you look away._
+
+**6.1 (Recommended) Family Sharing with your partner as organizer** — closes the factory-reset escape.
+- ☐ Settings → your **name** → **Family Sharing** → set up with your **partner as organizer** (or join their family). _If this is too much, skip to 6.2 — you still get a strong lock, just without reset-proofing._
+
+**6.2 Lock Screen Time on the iPhone — partner types the code.**
+- ☐ Settings → **Screen Time** → **Lock Screen Time Settings**.
+- ☐ **Hand the phone to your partner.** They enter a 4-digit code — **you look away, you must not see it** — and re-enter to confirm.
+- ☐ When it asks for **Screen Time Passcode Recovery** (an Apple ID), your partner enters **THEIR Apple ID**, or taps **Cancel** if using Family Sharing.
+  → ⚠️ Do NOT enter *your* Apple ID here — that would let you reset the code yourself via "Forgot Passcode?".
+
+**6.3 Lock Screen Time on the Mac** (same code).
+- ☐ System Settings → **Screen Time** → **Lock Screen Time Settings** → partner enters the **same code**.
+
+**6.4 FINAL TEST — you, without the code.**
+- ☐ iPhone: Settings → Screen Time → Content & Privacy → try to set **Web Content** back to Unrestricted → it **demands the passcode you don't have**. ✅
+- ☐ iPhone Safari **and** another browser → `instagram.com` → blocked. ✅
+- ☐ Open Instagram (or its App Limit in Settings) → can't raise/remove the limit; app hits the "Limit Reached" wall. ✅
+- ☐ Mac Safari → `instagram.com` → blocked. ✅
+
+If those pass — **you're done. The off switch now lives with your partner.**
+
+---
+
+## Optional add-ons (only if you want them)
+
+These are extra friction or nice-to-haves. **None of them is the lock** — Parts 2, 3, and 6 are. Skip unless you have a specific reason.
+
+<details>
+<summary><b>A hard "blocked" page in your daily browser (URLBlocklist)</b></summary>
+
+NextDNS (Part 4) already blocks Instagram in every browser. But if you want an instant, obvious "blocked by your administrator" page in the browser you use most, add a native policy. Replace the bundle ID with your browser's:
+
+- **Chrome:** `com.google.Chrome` · **Arc:** `company.thebrowser.Browser` · **Edge:** `com.microsoft.Edge`
+
+```
+defaults write <BUNDLE_ID> URLBlocklist -array \
+  "instagram.com" \
+  "*://*.instagram.com/*"
+```
+
+Fully quit and reopen the browser, then check `chrome://policy` (or `arc://policy`) → **Reload policies**. Instagram now shows `ERR_BLOCKED_BY_ADMINISTRATOR`.
+_To undo: `defaults delete <BUNDLE_ID> URLBlocklist`, restart the browser._
+_Note: Arc's policy support is partial — verify it actually took in `arc://policy`. If it didn't, NextDNS already has you covered._
+_To make it un-toggleable in the browser UI (friction, not a partner-lock), write it under `/Library/Managed\ Preferences/<BUNDLE_ID>` with `sudo` instead — only removable by deleting that plist as admin._
+
+</details>
+
+<details>
+<summary><b>Surgical: kill the feed, keep DMs</b></summary>
+
+If part of why you open Instagram is **messaging**, a total block creates a real reason to unlock — which weakens the whole thing. This removes only the algorithmic surface (feed, Reels, Explore) and leaves DMs reachable, which matches the actual goal ("quit **algorithmic feeds**"). It's a browser extension, so it's the **weakest layer as a lock** (two clicks to disable) — use it as a daily-driver layer, not the wall.
+
+**Block Reels/Explore by path (LeechBlock NG):** install it, and in Block Set 1 → "Sites to block":
 ```
 instagram.com/reels
 instagram.com/explore
 instagram.com/reels/*
 instagram.com/explore/*
 ```
+Leave `instagram.com/direct` out — that's DMs.
 
-**D-bis-1.4** — In **"When to block"**, set it to block **all day** (leave the time fields at 0000–2400, all days ticked).
-
-**D-bis-1.5** — Leave `instagram.com/direct` **out** of the list — that's DMs, and you want it reachable.
-  → Test: `instagram.com/direct/inbox` loads (DMs work ✅), `instagram.com/reels` is blocked ✅.
-
-### D-bis-2 — Hide the Home feed (cosmetic filters — use AdGuard on Chrome)
-
-_**Which extension:** on **Chrome**, use **AdGuard** (free browser extension). Chrome finished phasing out Manifest V2, so classic **uBlock Origin** no longer runs there, and the MV3 **uBlock Origin Lite** that replaced it **can't do custom cosmetic filters** — useless for this. AdGuard is MV3, actively maintained, and supports the element-hiding syntax below. **On Firefox instead?** Use classic **uBlock Origin** — it's the best tool for this and the rules are identical._
-
-**D-bis-2.1** — In Chrome, install the **AdGuard AdBlocker** extension from the Chrome Web Store. (You do **not** need the paid AdGuard desktop app — the free extension is enough.)
-
-**D-bis-2.2** — Click the AdGuard icon → the **gear/Settings** → **Extension settings** → **User rules** (the "My filters" equivalent).
-
-**D-bis-2.3** — Paste these rules:
+**Hide the Home feed (cosmetic filters):** on **Chrome/Arc** use the **AdGuard** extension (classic uBlock Origin no longer runs on Chromium's MV3, and uBlock Origin Lite can't do custom cosmetic filters; on **Firefox** use uBlock Origin). Add to User rules:
 ```
-! Hide Instagram home feed but keep the rest of the UI
 www.instagram.com##main[role="main"] > div:has(article)
-! Hide Reels & Explore entry points in the nav
 www.instagram.com##a[href="/explore/"]
 www.instagram.com##a[href^="/reels/"]
 ```
-_(This is standard Adblock cosmetic syntax — the same rules work verbatim in uBlock Origin on Firefox.)_
+_Instagram changes its markup often — if the feed reappears, the `article` selector may need a tweak._
 
-**D-bis-2.4** — Save / apply the rules.
-  → Test: open `instagram.com` — the scrolling feed is gone, DMs/search/profile still work. (Instagram changes its markup often; if the feed reappears, the `article` selector may need a tweak — that's the nature of cosmetic filters.)
+</details>
 
-### D-bis-3 — (Optional) Make it harder to disable (force-install policy)
+<details>
+<summary><b>hosts-file backstop (Mac)</b></summary>
 
-_This greys out the extension's remove/disable button so you can't kill it on impulse. It's **friction, not a wall** — as admin on your own Mac you can still delete the policy file — but it raises the effort from one click to "find and delete a plist."_
-
-**D-bis-3.1** — Get the extension's **ID** from `chrome://extensions` (toggle **Developer mode** on to see the 32-character ID under each extension).
-
-**D-bis-3.2** — In Terminal, create the managed-policy folder:
+Belt-and-suspenders on top of NextDNS. `sudo nano /etc/hosts`, add:
 ```
-sudo mkdir -p /Library/Managed\ Preferences
+127.0.0.1 instagram.com
+127.0.0.1 www.instagram.com
 ```
+Save (Ctrl+O, Enter, Ctrl+X), then `sudo dscacheutil -flushcache`.
+⚠️ A browser with **Secure DNS on** bypasses `/etc/hosts` — so this only helps browsers whose Secure DNS you turned off/pointed at NextDNS (Part 4.4). NextDNS is the better layer; this is redundancy.
 
-**D-bis-3.3** — Create the Chrome policy with the extension force-installed (replace `EXTENSION_ID`):
-```
-sudo defaults write com.google.Chrome ExtensionInstallForcelist -array-add "EXTENSION_ID;https://clients2.google.com/service/update2/crx"
-```
-
-**D-bis-3.4** — Fully quit and reopen Chrome. At `chrome://extensions` the extension now shows **"Installed by your organization"** and the remove button is gone.
-  → To undo (if you ever legitimately need to): `sudo defaults delete com.google.Chrome ExtensionInstallForcelist` and restart Chrome. Because *you* can run that, this layer is friction — the partner-locked Screen Time block in Parts B–F remains the real lock.
-
-**Bottom line:** run D-bis as your everyday layer (feed dead, DMs alive) and keep Parts B–F as the hard, partner-held wall behind it.
-
----
-
-## PART E — NextDNS redundant layer (10 min, optional but recommended)
-
-_Catches app/API traffic and works on cellular. Free up to 300k queries/month._
-
-**E1. Create the account.**
-- ☐ E1.1 — On the Mac, go to **nextdns.io**, click **Try it now / Sign up** (free).
-- ☐ E1.2 — Note your **Configuration ID** (a short code shown on the Setup page).
-
-**E2. Add Instagram to the denylist.**
-- ☐ E2.1 — In the NextDNS dashboard, click the **Denylist** tab.
-- ☐ E2.2 — Add each of these (click Add after each):
-  `instagram.com`, `www.instagram.com`, `cdninstagram.com`, `api.instagram.com`, `graph.instagram.com`, `platform.instagram.com`
-- ☐ E2.3 — Click the **Settings** tab → turn ON **Block bypass methods**.
-
-**E3. Install on iPhone (works on cellular).**
-- ☐ E3.1 — On the iPhone, open the NextDNS Setup page → tap the iOS **"Download the configuration profile"** (.mobileconfig) option.
-- ☐ E3.2 — Tap **Allow** when it says "This website is trying to download a configuration profile."
-- ☐ E3.3 — Open **Settings** → tap **Profile Downloaded** (near the top) → **Install** (top-right) → enter your iPhone unlock passcode → **Install** → **Install**.
-  → You should see: NextDNS listed under Settings → General → VPN & Device Management.
-
-**E4. Install on Mac.**
-- ☐ E4.1 — On the NextDNS Setup page on the Mac, follow the **Apple → macOS** profile download, then **System Settings → General → Device Management → Install**. (Or install their menu-bar app.)
-
-**E5. Test on cellular.**
-- ☐ E5.1 — On iPhone, turn **Wi-Fi OFF** (so you're on cellular only).
-- ☐ E5.2 — Open Safari → `instagram.com`.
-  → You should see: still blocked. ✅
-- ☐ E5.3 — Turn Wi-Fi back on.
-
----
-
-## PART F — Hand the keys to your partner (5 min) 🔒 do this LAST
-
-_Only start this once Parts B, C, D all tested as blocked. This is the step that makes it self-binding. Your partner does the typing._
-
-**F1. (Recommended) Set up Family Sharing with partner as organizer** — closes the factory-reset escape.
-- ☐ F1.1 — Settings → tap your **name** → **Family Sharing** → **Set Up Family** and have your **partner** be the organizer, OR join their existing family. (If this is too much, skip to F2 — you still get a strong lock, just without the reset-proofing.)
-
-**F2. Lock Screen Time on the iPhone — PARTNER TYPES THE CODE.**
-- ☐ F2.1 — Settings → **Screen Time** → scroll down → tap **Lock Screen Time Settings**.
-- ☐ F2.2 — **Hand the phone to your partner.** They enter a 4-digit code. **You look away — you must not see it.**
-- ☐ F2.3 — They re-enter the same code to confirm.
-- ☐ F2.4 — When it asks for **Screen Time Passcode Recovery** (an Apple ID), your partner enters **THEIR Apple ID** — or tap **Cancel** to skip if using Family Sharing.
-  → ⚠️ Do NOT enter *your* Apple ID here — that would let you reset the code yourself via "Forgot Passcode?".
-
-**F3. Lock Screen Time on the Mac.**
-- ☐ F3.1 — System Settings → **Screen Time** → scroll to **Lock Screen Time Settings** → turn on → **partner enters the same code**.
-
-**F4. FINAL TEST — you, without the code.**
-- ☐ F4.1 — On iPhone: Settings → Screen Time → Content & Privacy → try to change **Web Content** back to "Unrestricted."
-  → You should see: it **demands the passcode you don't have**. ✅
-- ☐ F4.2 — Safari → `instagram.com` → blocked. ✅
-- ☐ F4.3 — Chrome → `instagram.com` → blocked. ✅
-- ☐ F4.4 — Open Instagram (or its App Limit in Settings) → you can't raise/remove the limit without the code, and the app hits the "Limit Reached" wall. ✅
-- ☐ F4.5 — Mac Safari → `instagram.com` → blocked. ✅
-
-If all five show ✅ — **you're done. The off switch now lives with your partner.**
+</details>
 
 ---
 
 ## Quick troubleshooting
 
-- **Website not blocked after B5?** The entries are probably under "Always Allow" instead of "Never Allow." Re-do B4–B5.
-- **Block works in Safari but not Chrome?**
-  - **On iPhone:** the Web Content filter is system-wide there — make sure Content & Privacy Restrictions (B2.2) is actually ON; that covers all browsers.
-  - **On Mac:** this is *expected* — macOS Screen Time only filters Safari/WebKit, not Chrome. That's what **D5** (Chrome URLBlocklist) is for. If Chrome still loads Instagram after D5, quit Chrome fully (Cmd-Q) and check `chrome://policy` shows URLBlocklist.
-- **Forgot to test before locking and something's broken?** Your partner unlocks with the code, you fix it, they re-lock. (This is exactly why F comes last.)
-- **NextDNS stopped filtering?** You may have hit the 300k/month free cap — it resets monthly; Screen Time still holds regardless.
+- **Website not blocked after Part 2.5?** The entries are probably under "Always Allow" instead of "Never Allow." Re-do 2.4–2.5.
+- **Blocked in Safari but not Chrome/Arc?**
+  - **iPhone:** the filter is system-wide — make sure Content & Privacy Restrictions (2.2) is actually ON.
+  - **Mac:** *expected* — macOS Screen Time only filters Safari. That's what NextDNS (Part 4) is for. If a browser still loads Instagram, its **Secure DNS** is bypassing NextDNS — fix it in Part 4.4.
+- **Locked too early and something's broken?** Your partner unlocks with the code, you fix it, they re-lock. (This is why Part 6 comes last.)
+- **NextDNS stopped filtering?** You may have hit the 300k/month free cap — it resets monthly; the iPhone Screen Time lock holds regardless.
 
 ---
 
 ## The one honest limitation
 
-Everything here is solid **except** the human link: if you persuade your partner to give you the code, it's all undone in 30 seconds. The technology is genuinely hard to beat now — the website block even survives a VPN. The weak point is the conversation at midnight. Choose a partner who will say **no**.
+Everything here is solid **except** the human link: if you persuade your partner to give you the code, it's undone in 30 seconds. The technology is genuinely hard to beat now — the iPhone website block even survives a VPN. The weak point is the conversation at midnight. **Choose a partner who will say no.**
+
+If you ever catch yourself beating even that — flipping DNS off, deleting profiles — the nuclear option below removes those toggles from your reach entirely. Most people never need it.
 
 ---
 
 ## Appendix — The Nuclear Option (supervised iPhone + locked DNS)
 
-This is the free-but-heavy path for when Parts A–F aren't enough — when you want the DNS block to be **impossible to toggle off in Settings** and the whole profile **impossible to delete without a password your partner holds**. It's what an employer or school does to a managed phone, applied to yourself as a commitment device.
+This is the free-but-heavy path for when the tiers above aren't enough — when you want the DNS block **impossible to toggle off in Settings** and the whole profile **impossible to delete without a password your partner holds**. It's what an employer or school does to a managed phone, applied to yourself as a commitment device.
 
-**The cost is real:** supervising a phone **erases it** (full wipe + restore), and you'll set it up from a Mac using Apple's free tools. Do this only if the Screen Time lock in Parts A–F has proven too easy to talk your way around.
+**The cost is real:** supervising a phone **erases it** (full wipe + restore), set up from a Mac with Apple's free tools. Do this only if the partner-locked Screen Time setup has proven too easy to talk your way around.
 
 ### What supervision buys you that Screen Time can't
 
-| Capability | Screen Time (Parts A–F) | Supervised profile (this appendix) |
+| Capability | Screen Time (Tiers 1–2) | Supervised profile |
 |---|---|---|
 | Block instagram.com | ✅ (VPN-proof) | ✅ |
 | Block the app's APIs via DNS | ⚠️ DNS is toggleable in Settings | ✅ **DNS off-switch greyed out** ("Prohibit Disablement") |
-| Stop profile removal | ❌ | ✅ **Non-removable / password-protected removal** |
+| Stop profile removal | ❌ | ✅ **Password-protected removal** |
 | Survive "Reset Network Settings" | ❌ | ✅ (Restrictions can disable erase) |
 | Undo path | Partner-held passcode | Partner-held **removal password** + wipe |
 
 ### What you need (all free)
 
-- A **Mac** (you have one).
-- **Apple Configurator** — free on the Mac App Store.
-- **iMazing Profile Editor** (free) or **Apple Configurator's** own profile editor — to build the DNS payload with the "Prohibit Disablement" flag.
-- A **NextDNS** config (from Part E) — you'll reuse its config ID.
-- ~45–60 min and willingness to wipe/restore the iPhone once.
+- A **Mac**, **Apple Configurator** (Mac App Store), **iMazing Profile Editor** (for the DNS payload with "Prohibit Disablement"), and your **NextDNS** config. ~45–60 min plus a phone wipe.
 
 ### Step 1 — Supervise the iPhone (this wipes it)
 
-1. Back up the iPhone first (iCloud or Finder) — supervision **erases** it.
-2. On the Mac, open **Apple Configurator** → connect the iPhone by cable.
-3. Right-click the device → **Prepare** → choose **Manual** enrollment, **Do not enroll in MDM**, and tick **Supervise devices**.
-4. Let it erase and reprovision. Restore your backup afterward.
-5. The phone is now **supervised** — you'll see "This iPhone is supervised and managed by…" in Settings → General → VPN & Device Management.
+1. Back up first (iCloud or Finder) — supervision **erases** the phone.
+2. Apple Configurator → connect by cable → right-click device → **Prepare** → **Manual**, **Do not enroll in MDM**, tick **Supervise devices**.
+3. Let it erase and reprovision, then restore your backup.
+4. Confirm: Settings → General → VPN & Device Management shows "This iPhone is supervised."
 
 ### Step 2 — Build the locked DNS profile
 
-In **iMazing Profile Editor** (easier than raw Configurator for this):
+In **iMazing Profile Editor**:
 
-1. Add a **DNS Settings** (DNS-over-HTTPS/TLS) payload → paste your **NextDNS DoH URL** (NextDNS gives you a `https://dns.nextdns.io/<yourid>` endpoint and a ready-made `.mobileconfig`).
-2. Turn ON **"Prohibit Disablement"** in the DNS payload — this is the flag that **greys out the DNS off-switch** in Settings so you can't just flip it off.
-3. Add a **Restrictions** payload and disable:
-   - **Allow Erase All Content and Settings** → OFF (blocks the factory-reset escape from the phone itself).
-   - **Allow adding VPN configurations** → OFF (stops a rogue VPN from re-routing around DNS).
-   - Optionally **Allow modifying account settings / installing configuration profiles** → OFF.
-4. In the profile's **General** payload, set **Security → When removing profile** to **"With Authorization"** and set a **removal password** — **your partner types this; you never see it.** Now the profile can't be deleted without their password.
+1. **DNS Settings** (DoH/DoT) payload → paste your **NextDNS DoH URL** (`https://dns.nextdns.io/<yourid>`).
+2. Turn ON **"Prohibit Disablement"** — greys out the DNS off-switch in Settings.
+3. **Restrictions** payload → disable **Allow Erase All Content and Settings** (blocks on-device reset) and **Allow adding VPN configurations** (stops a rogue VPN re-routing around DNS).
+4. **General** payload → **Security → When removing profile → With Authorization** → set a **removal password your partner types and you never see**.
 
 ### Step 3 — Install and lock
 
-1. Save the `.mobileconfig` and install it on the supervised iPhone (AirDrop or Configurator push).
-2. Verify: Settings → General → VPN & Device Management → the profile shows as **installed and non-removable** (removal demands the password).
-3. Verify the DNS off-switch: Settings → General → **VPN, DNS & Device Management → DNS** → the toggle is **greyed out**. ✅
-4. Verify the block: turn Wi-Fi off (cellular only), open the Instagram app if installed and Safari → both should fail to load Instagram. ✅
+1. Install the `.mobileconfig` on the supervised iPhone (AirDrop or Configurator).
+2. Verify: profile shows as **non-removable** (removal demands the password); DNS toggle in Settings is **greyed out**. ✅
+3. Verify the block on cellular (Wi-Fi off): app + Safari both fail to reach Instagram. ✅
 
-### The residual holes (be honest with yourself)
+### The residual holes (be honest)
 
-- **DFU restore from a computer still wipes supervision.** Disabling "Erase All Content and Settings" only closes the *on-device* reset. A cabled DFU restore from a Mac can strip everything. To close this too you'd need **Apple Business Manager** (turns supervision into MDM-locked ownership that survives DFU) — that's beyond a free personal setup. **Mitigation:** keep **Activation Lock** on under **your partner's Apple ID**, so a wiped phone demands *their* credentials to reactivate.
-- **Known NextDNS bug:** there have been reports that combining NextDNS's `.mobileconfig` with **"Prohibit Disablement"** can make the profile fail to load or the DNS not apply on some iOS versions. If DNS silently stops working, test with the flag off first, then re-enable — or use a plain DoH profile pointed at your NextDNS endpoint rather than NextDNS's pre-baked file.
-- **The human link is still the real lock.** Even here, if your partner hands over the removal password, it's over in a minute. Supervision raises the effort from "tap a toggle" to "wipe and rebuild the phone" — that gap is the whole point.
+- **A cabled DFU restore from a computer still wipes supervision.** Disabling on-device "Erase All Content" doesn't close this. Fully closing it needs **Apple Business Manager** (beyond a free personal setup). **Mitigation:** keep **Activation Lock** under **your partner's Apple ID**, so a wiped phone needs *their* credentials to reactivate.
+- **Known NextDNS bug:** combining NextDNS's `.mobileconfig` with "Prohibit Disablement" can make the profile fail to load on some iOS versions. If DNS silently stops, test with the flag off, then re-enable — or use a plain DoH profile pointed at your NextDNS endpoint.
+- **The human link is still the real lock.** Even here, if your partner hands over the removal password, it's over. Supervision just raises the effort from "tap a toggle" to "wipe and rebuild the phone" — that gap is the point.
 
 ### When to actually do this
 
-Parts A–F stop impulse use and survive a VPN. Reach for this appendix **only** if you've caught yourself flipping the NextDNS toggle off in Settings, or deleting the Screen Time / DNS profile, to sneak back in. Supervision removes those toggles from your reach entirely. It's the difference between a locked door and a welded one — most people never need the weld.
+The tiers above stop impulse use and survive a VPN. Reach for this **only** if you've caught yourself flipping the NextDNS toggle off or deleting profiles to sneak back in. It's the difference between a locked door and a welded one — most people never need the weld.
