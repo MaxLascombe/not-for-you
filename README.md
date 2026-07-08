@@ -16,7 +16,8 @@ So the strategy is two tiers:
 | | **Tier 1 — iPhone** | **Tier 2 — Mac** |
 |---|---|---|
 | Role | **The real lock** | **Friction, not a fortress** |
-| How | Screen Time website + app block, **locked by your partner** | NextDNS (covers all browsers + the app) + Safari block |
+| Instagram access | **None** — fully blocked | **DMs only** — feed killed, messaging kept |
+| How | Screen Time website + app block, **locked by your partner** | Feed-killer browser extension + one intentional door |
 | Undo-resistance | Hard — needs a passcode you don't have | Soft — you *can* undo it, but it's annoying enough to stop impulse |
 
 And the one truth no tool changes: **the real lock is your accountability partner.** Every free layer is undoable by someone with admin rights to their own devices. The thing that actually holds is a person who won't hand you the passcode. Pick that person well — everything else is drywall around that one load-bearing wall.
@@ -90,47 +91,60 @@ _Uses an **App Limit on the Social category** — blocks Instagram (and other fe
 
 ---
 
-# TIER 2 — Mac: friction, not a fortress
+# TIER 2 — Mac: kill the feed, keep your DMs
 
-_The Mac can't be locked as hard as the iPhone for free — and it doesn't need to be. The goal here is enough friction that you don't drift into Instagram, not a perfect wall. **NextDNS does the broad work in one shot; the Safari block is a partner-lockable bonus.**_
+_On the Mac you want to **still message people**, so a whole-domain block is off the table — it would take your DMs with it. The catch worth understanding: **nothing at the DNS or OS level can tell your feed apart from your DMs.** Same site, same domain, same login — the only place that distinction exists is *inside the page*. So feed-only blocking has to be a **browser extension**, which makes this tier the weakest link as a lock (two clicks to disable). That's fine: the iPhone is the real lock, and the whole point of hiding the feed is that even when you open Instagram to message someone, **there's no feed to fall into.**_
 
-## Part 4 — NextDNS: one block for every browser + the app (10 min) ⭐ primary Mac layer
+## Part 4 — Feed-killer extension ⭐ the Mac layer (10 min)
 
-_This is the fix for the whack-a-mole problem. DNS resolution happens **below** the browser, at the OS level — so blocking Instagram here catches Safari, Chrome, Arc, Firefox, and the app's APIs **all at once**, with nothing to repeat per browser. Free up to 300k queries/month._
+_Pick the **one browser you'll use for Instagram DMs** (e.g. Arc) and set it up there. Two pieces: hide the home feed (cosmetic filter) and block Reels/Explore by path. Your DMs at `/direct` stay fully working._
 
-**4.1 Create the account.**
-- ☐ On the Mac, go to **nextdns.io** → **Try it now / Sign up** (free) → note your **Configuration ID** and your **DoH URL** (looks like `https://dns.nextdns.io/abc123`).
+**4.1 Install the extension.**
+- ☐ **Chrome / Arc / other Chromium:** install **AdGuard** (classic uBlock Origin no longer runs on Chromium's MV3, and uBlock Origin Lite can't do custom cosmetic rules).
+- ☐ **Firefox:** install **uBlock Origin** instead.
 
-**4.2 Add Instagram to the denylist.**
-- ☐ Dashboard → **Denylist** → add each (Instagram-only, so your messaging apps keep working):
-  `instagram.com`, `www.instagram.com`, `i.instagram.com`, `api.instagram.com`, `graph.instagram.com`, `platform.instagram.com`, `cdninstagram.com`
-  ⚠️ _Do **not** add `fbcdn.net` — it's shared Meta infrastructure used by Messenger/WhatsApp._
-- ☐ **Settings** tab → turn ON **Block bypass methods**.
+**4.2 Hide the home feed (cosmetic filters).**
+- ☐ AdGuard → **Settings → User rules** (uBO → **Dashboard → My filters**) → add:
+```
+www.instagram.com##main[role="main"] > div:has(article)
+www.instagram.com##a[href="/explore/"]
+www.instagram.com##a[href^="/reels/"]
+```
+  _First line hides the scrolling feed; the other two hide the Explore and Reels nav links so you don't wander in._
 
-**4.3 Make the Mac use NextDNS system-wide.**
-- ☐ On the NextDNS Setup page → follow **Apple → macOS** → install the configuration profile (**System Settings → General → Device Management → Install**). Now every app resolves DNS through NextDNS.
+**4.3 Block Reels/Explore by path (LeechBlock NG).**
+- ☐ Install **LeechBlock NG** → Block Set 1 → "Sites to block":
+```
+instagram.com/reels
+instagram.com/explore
+instagram.com/reels/*
+instagram.com/explore/*
+```
+- ☐ Leave `instagram.com/direct` **out** — that's your DMs.
+  _The cosmetic rules hide these; this blocks the full-screen Reels/Explore players too, even if you paste a direct link._
 
-**4.4 Close the one hole — browser Secure DNS.**
-_A browser's own **Secure DNS** (DNS-over-HTTPS) can skip the system resolver and defeat the block. Point each browser you actually use at NextDNS so it can't route around it — this keeps the privacy benefit AND enforces the filter._
-- ☐ **Arc:** Settings → Privacy → **Secure DNS → Custom** → paste your NextDNS **DoH URL**.
-- ☐ **Chrome / other Chromium:** `chrome://settings/security` → Use secure DNS → **Custom** → paste the DoH URL.
-- ☐ (Only bother with browsers you actually open — you don't need to chase every one.)
+**4.4 Test.**
+- ☐ `instagram.com` → loads, but **no feed** (empty home). ✅
+- ☐ `instagram.com/reels` → **blocked / redirected**. ✅
+- ☐ `instagram.com/direct` → **DMs work**, you can message people. ✅
+- ☐ If the feed reappears later: Instagram changed its markup — the `article` selector in 4.2 needs a tweak (see troubleshooting).
 
-**4.5 Test.**
-- ☐ In Arc (and Safari) → `instagram.com` → **blocked / won't load**. ✅
-- ☐ Bonus: install the NextDNS profile on the **iPhone** too (NextDNS Setup → iOS profile) — it adds app/API blocking on **cellular**. The iPhone's real lock is still Part 2; this is extra.
+**4.5 (Optional) Make the extension harder to remove.**
+- ☐ Force-install it via policy so it isn't a two-click uninstall. Still not partner-lockable — it's friction, not a wall. See Optional add-ons.
 
 ---
 
-## Part 5 — Safari website block (partner-lockable bonus, 5 min)
+## Part 5 — One door in: fully block Instagram in every *other* browser (recommended, 5 min)
 
-_Screen Time on the Mac only filters **Safari/WebKit**, not Chrome/Arc (that's why Part 4 exists). But it's still worth doing, because — unlike NextDNS — it can be **partner-locked** in Part 6._
+_Part 4 gives you one browser where DMs work and the feed is dead. To stop yourself drifting into a full Instagram anywhere else, block it completely in the browsers you **didn't** choose — so there's exactly one intentional door._
 
-**5.1** — Apple menu → **System Settings** → **Screen Time** (same Apple ID as iPhone). If off, **Turn On Screen Time** (no passcode yet).
+**5.1 Safari** (this one is **partner-lockable** in Part 6) — Apple menu → **System Settings** → **Screen Time** (same Apple ID as iPhone; **Turn On** if off, no passcode yet) → **Content & Privacy** → toggle **ON** → **Content Restrictions** → **Web Content** → **Limit Adult Websites** → **Customize…** → under **Restricted**, add `https://www.instagram.com` and `https://instagram.com` → **Done**.
 
-**5.2** — **Content & Privacy** → toggle **ON** → **Content Restrictions** → **Web Content** → **Limit Adult Websites** → **Customize…** → under **Restricted**, add `https://www.instagram.com` and `https://instagram.com` → **Done**.
+**5.2 Other Chromium browsers you don't use for IG** — block them with a hard admin page via the **URLBlocklist** add-on (see Optional add-ons). Don't apply it to your Part 4 browser.
 
-**5.3** — Test: **Safari** → `instagram.com` → **blocked**. ✅ (Chrome/Arc are handled by Part 4, not this.)
+**5.3 Test.**
+- ☐ **Safari** → `instagram.com` → **blocked**. ✅
+- ☐ Your **Part 4 browser** → `/direct` → **DMs still work**. ✅
 
 ---
 
@@ -155,6 +169,7 @@ _Only start once Tiers 1 and 2 are tested and working. **This is the step that m
 - ☐ iPhone Safari **and** another browser → `instagram.com` → blocked. ✅
 - ☐ Open Instagram (or its App Limit in Settings) → can't raise/remove the limit; app hits the "Limit Reached" wall. ✅
 - ☐ Mac Safari → `instagram.com` → blocked. ✅
+- ☐ Your Part 4 browser → feed is empty, `/direct` → DMs work. ✅ (This one isn't partner-locked — it's the door you chose to keep.)
 
 If those pass — **you're done. The off switch now lives with your partner.**
 
@@ -165,9 +180,9 @@ If those pass — **you're done. The off switch now lives with your partner.**
 These are extra friction or nice-to-haves. **None of them is the lock** — Parts 2, 3, and 6 are. Skip unless you have a specific reason.
 
 <details>
-<summary><b>A hard "blocked" page in your daily browser (URLBlocklist)</b></summary>
+<summary><b>Hard-block Instagram in your <i>non-DM</i> browsers (URLBlocklist)</b></summary>
 
-NextDNS (Part 4) already blocks Instagram in every browser. But if you want an instant, obvious "blocked by your administrator" page in the browser you use most, add a native policy. Replace the bundle ID with your browser's:
+This is Part 5.2 — the "one door in" enforcement for the Chromium browsers you **don't** use for DMs. It shows an instant `ERR_BLOCKED_BY_ADMINISTRATOR` page. Replace the bundle ID with the browser's:
 
 - **Chrome:** `com.google.Chrome` · **Arc:** `company.thebrowser.Browser` · **Edge:** `com.microsoft.Edge`
 
@@ -177,47 +192,32 @@ defaults write <BUNDLE_ID> URLBlocklist -array \
   "*://*.instagram.com/*"
 ```
 
-Fully quit and reopen the browser, then check `chrome://policy` (or `arc://policy`) → **Reload policies**. Instagram now shows `ERR_BLOCKED_BY_ADMINISTRATOR`.
+Fully quit and reopen the browser, then check `chrome://policy` (or `arc://policy`) → **Reload policies**.
+⚠️ **Do NOT run this on your Part 4 browser** — it blocks the whole domain, DMs included.
 _To undo: `defaults delete <BUNDLE_ID> URLBlocklist`, restart the browser._
-_Note: Arc's policy support is partial — verify it actually took in `arc://policy`. If it didn't, NextDNS already has you covered._
-_To make it un-toggleable in the browser UI (friction, not a partner-lock), write it under `/Library/Managed\ Preferences/<BUNDLE_ID>` with `sudo` instead — only removable by deleting that plist as admin._
+_Arc's policy support is partial — verify it actually took in `arc://policy`._
+_To make it un-toggleable (friction, not a partner-lock), write it under `/Library/Managed\ Preferences/<BUNDLE_ID>` with `sudo` — only removable by deleting that plist as admin._
 
 </details>
 
 <details>
-<summary><b>Surgical: kill the feed, keep DMs</b></summary>
+<summary><b>Force-install the feed-killer so it can't be uninstalled in two clicks</b></summary>
 
-If part of why you open Instagram is **messaging**, a total block creates a real reason to unlock — which weakens the whole thing. This removes only the algorithmic surface (feed, Reels, Explore) and leaves DMs reachable, which matches the actual goal ("quit **algorithmic feeds**"). It's a browser extension, so it's the **weakest layer as a lock** (two clicks to disable) — use it as a daily-driver layer, not the wall.
+Makes the Part 4 extension resist a casual disable. Friction only — not partner-lockable.
 
-**Block Reels/Explore by path (LeechBlock NG):** install it, and in Block Set 1 → "Sites to block":
-```
-instagram.com/reels
-instagram.com/explore
-instagram.com/reels/*
-instagram.com/explore/*
-```
-Leave `instagram.com/direct` out — that's DMs.
-
-**Hide the Home feed (cosmetic filters):** on **Chrome/Arc** use the **AdGuard** extension (classic uBlock Origin no longer runs on Chromium's MV3, and uBlock Origin Lite can't do custom cosmetic filters; on **Firefox** use uBlock Origin). Add to User rules:
-```
-www.instagram.com##main[role="main"] > div:has(article)
-www.instagram.com##a[href="/explore/"]
-www.instagram.com##a[href^="/reels/"]
-```
-_Instagram changes its markup often — if the feed reappears, the `article` selector may need a tweak._
+- **Chromium:** add the extension's ID to the `ExtensionInstallForcelist` policy (`defaults write <BUNDLE_ID> ExtensionInstallForcelist -array "<EXT_ID>;https://clients2.google.com/service/update2/crx"`). A force-installed extension can't be toggled off from `chrome://extensions`.
+- Grab `<EXT_ID>` from the extension's `chrome://extensions` card. Verify at `chrome://policy` → Reload policies.
 
 </details>
 
 <details>
-<summary><b>hosts-file backstop (Mac)</b></summary>
+<summary><b>Changed your mind — you want DMs gone too (whole-domain block)</b></summary>
 
-Belt-and-suspenders on top of NextDNS. `sudo nano /etc/hosts`, add:
-```
-127.0.0.1 instagram.com
-127.0.0.1 www.instagram.com
-```
-Save (Ctrl+O, Enter, Ctrl+X), then `sudo dscacheutil -flushcache`.
-⚠️ A browser with **Secure DNS on** bypasses `/etc/hosts` — so this only helps browsers whose Secure DNS you turned off/pointed at NextDNS (Part 4.4). NextDNS is the better layer; this is redundancy.
+If keeping DMs turns out to be the crack that lets you back in, drop the "keep DMs" goal and block the whole domain across every browser at once with **NextDNS** (free, OS-level, catches the app APIs too):
+
+- Sign up at **nextdns.io**, add to the **Denylist**: `instagram.com`, `www.instagram.com`, `i.instagram.com`, `api.instagram.com`, `graph.instagram.com`, `platform.instagram.com`, `cdninstagram.com`. ⚠️ **Not** `fbcdn.net` (shared Meta infra — breaks Messenger/WhatsApp).
+- Install the macOS profile, turn on **Block bypass methods**, and point each browser's **Secure DNS** at your NextDNS DoH URL (else DNS-over-HTTPS routes around it).
+- This **kills DMs** — that's the whole point of this option. It replaces Part 4 rather than adding to it.
 
 </details>
 
@@ -226,19 +226,21 @@ Save (Ctrl+O, Enter, Ctrl+X), then `sudo dscacheutil -flushcache`.
 ## Quick troubleshooting
 
 - **Website not blocked after Part 2.5?** The entries are probably under "Always Allow" instead of "Never Allow." Re-do 2.4–2.5.
-- **Blocked in Safari but not Chrome/Arc?**
-  - **iPhone:** the filter is system-wide — make sure Content & Privacy Restrictions (2.2) is actually ON.
-  - **Mac:** *expected* — macOS Screen Time only filters Safari. That's what NextDNS (Part 4) is for. If a browser still loads Instagram, its **Secure DNS** is bypassing NextDNS — fix it in Part 4.4.
+- **iPhone: blocked in Safari but not Chrome/Arc?** The filter is system-wide — make sure Content & Privacy Restrictions (2.2) is actually ON.
+- **Mac: the feed came back (Part 4)?** Instagram changed its HTML. Open the home page, right-click the feed → Inspect, find the container element, and update the `##main[role="main"] > div:has(article)` rule in 4.2 to match. This is the built-in cost of the cosmetic approach — it needs the occasional tweak.
+- **Mac: DMs stopped working?** You probably applied a whole-domain block (URLBlocklist / NextDNS / hosts) to your Part 4 browser. Those don't do feed-only — remove the block from that one browser.
 - **Locked too early and something's broken?** Your partner unlocks with the code, you fix it, they re-lock. (This is why Part 6 comes last.)
-- **NextDNS stopped filtering?** You may have hit the 300k/month free cap — it resets monthly; the iPhone Screen Time lock holds regardless.
 
 ---
 
 ## The one honest limitation
 
-Everything here is solid **except** the human link: if you persuade your partner to give you the code, it's undone in 30 seconds. The technology is genuinely hard to beat now — the iPhone website block even survives a VPN. The weak point is the conversation at midnight. **Choose a partner who will say no.**
+Two soft spots, by design:
 
-If you ever catch yourself beating even that — flipping DNS off, deleting profiles — the nuclear option below removes those toggles from your reach entirely. Most people never need it.
+1. **The human link.** If you persuade your partner to give you the iPhone code, it's undone in 30 seconds. The tech is genuinely hard to beat now — the iPhone block even survives a VPN. The weak point is the conversation at midnight. **Choose a partner who will say no.**
+2. **The Mac door you chose to keep.** Because you want DMs, the Mac tier is a browser extension — two clicks to disable. That's an accepted tradeoff, not a bug: the feed being hidden means the DM browser isn't a scrolling trap, and the iPhone (where the addiction actually lives) stays fully locked. If you find yourself disabling the extension to get the feed back, that's the signal to switch to the whole-domain block (Optional add-ons) and give up DMs on the laptop.
+
+If you ever catch yourself beating even the iPhone lock — deleting profiles, factory-resetting — the nuclear option below removes those toggles from your reach entirely. Most people never need it.
 
 ---
 
