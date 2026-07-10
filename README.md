@@ -8,6 +8,7 @@ A free, self-binding block for the feeds that hijack your attention — on iPhon
 |---|---|---|
 | Instagram | [sites/instagram.md](sites/instagram.md) | DMs (feed / Reels / Explore killed) |
 | LinkedIn | [sites/linkedin.md](sites/linkedin.md) | Messaging + Jobs (home feed killed) |
+| Facebook | [sites/facebook.md](sites/facebook.md) | Messenger, Marketplace (feed / Reels / Watch killed) |
 
 _This README is the **method** — the steps you do once. Each site guide holds the **values** you plug into those steps (which domains, which app category, which feed-killer rules). **Adding a site later = add its values to each Part below.** When a step says "for each site," pull the values from every guide in the table above._
 
@@ -69,7 +70,8 @@ _This is the winner: one setting blocks each site in **every browser at once**, 
 
 **2.5 Add every site's domains to NEVER ALLOW.**
 - ☐ Under **NEVER ALLOW** → **Add Website** → add each domain from the **Part 2** section of every site guide.
-  _With Instagram + LinkedIn that's four entries: `https://www.instagram.com`, `https://instagram.com`, `https://www.linkedin.com`, `https://linkedin.com`._
+  _With Instagram + LinkedIn + Facebook that's six entries: `https://www.instagram.com`, `https://instagram.com`, `https://www.linkedin.com`, `https://linkedin.com`, `https://www.facebook.com`, `https://facebook.com`._
+  _Some guides list optional extras (e.g. `messenger.com` for Facebook) — check each guide's Part 2._
 
 **2.6 TEST IT NOW** (before anything is locked).
 - ☐ Safari → each site → **blocked** ("You cannot browse this page"). ✅
@@ -84,7 +86,7 @@ _Uses **App Limits by category** — blocks the apps from opening, survives rein
 
 **3.1 Create the limit(s).**
 - ☐ Settings → Screen Time → **App Limits** → **Add Limit**.
-- ☐ Tick the **category each site sits under** — see each site guide's **Part 3**. ⚠️ These differ: **Instagram is under Social, LinkedIn under Business.** So you may tick more than one category.
+- ☐ Tick the **category each site sits under** — see each site guide's **Part 3**. ⚠️ These differ: **Instagram and Facebook are under Social, LinkedIn under Business.** So you may tick more than one category — but one Social limit covers both Instagram and Facebook.
   _The category list is Apple's built-in classification, **not** your installed-apps list — so it's selectable even with the app uninstalled, and it auto-applies the moment a matching app is downloaded._
   _If a category is too broad (e.g. you don't want to limit all Business apps), a site guide may tell you to add an **individual app limit** instead — note that one needs the app installed to pick it and resets on reinstall, so it leans on Parts 1–2._
 - ☐ **Next** → set the time to **1 minute** (the minimum) → turn **ON** **Block at End of Limit** ← this makes it a wall, not a nudge → **Add**.
@@ -178,7 +180,8 @@ This is Part 5.2 — the "one door in" enforcement for the Chromium browsers you
 ```
 defaults write <BUNDLE_ID> URLBlocklist -array \
   "instagram.com" "*://*.instagram.com/*" \
-  "linkedin.com"  "*://*.linkedin.com/*"
+  "linkedin.com"  "*://*.linkedin.com/*" \
+  "facebook.com"  "*://*.facebook.com/*"
 ```
 
 Fully quit and reopen the browser, then check `chrome://policy` (or `arc://policy`) → **Reload policies**.
