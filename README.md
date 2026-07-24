@@ -9,6 +9,7 @@ A free, self-binding block for the feeds that hijack your attention — on iPhon
 | Instagram | [sites/instagram.md](sites/instagram.md) | DMs (feed / Reels / Explore killed) |
 | LinkedIn | [sites/linkedin.md](sites/linkedin.md) | Messaging + Jobs (home feed killed) |
 | Facebook | [sites/facebook.md](sites/facebook.md) | Messenger, Marketplace (feed / Reels / Watch killed) |
+| Bluesky | [sites/bluesky.md](sites/bluesky.md) | DMs (Following / Discover feeds killed) |
 
 _This README is the **method** — the steps you do once. Each site guide holds the **values** you plug into those steps (which domains, which app category, which feed-killer rules). **Adding a site later = add its values to each Part below.** When a step says "for each site," pull the values from every guide in the table above._
 
