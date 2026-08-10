@@ -119,7 +119,8 @@ _Pick the **one browser you'll use for these sites** (e.g. Arc) and set it up th
 **4.3 Add every site's path blocks.**
 - ☐ LeechBlock NG → Block Set → "Sites to block" → add the **path blocks** from each site guide's **Part 4**. Mind each guide's "keep reachable" list — don't block those paths.
 - ☐ Some guides also set a **"Redirect to this URL instead"** for their block set (Bluesky → DMs, Instagram → DMs, YouTube → Subscriptions). Set it where the guide says: a blocked click then lands you somewhere harmless instead of on a block page you're tempted to argue with.
-  _Two bits of LeechBlock syntax the guides lean on: patterns match by **prefix** (so `site.com/reels` covers `/reels/anything`), and a `+` prefix marks an **exception that beats a block**. That's what lets YouTube block its whole domain but allow watch pages back, and lets Instagram block the Explore grid while keeping search results — see those guides. If a set has a redirect target, make sure that target is itself excepted, or it'll bounce in a loop._
+  _Two bits of LeechBlock syntax the guides lean on: patterns match by **prefix** (so `site.com/reels` covers `/reels/anything`), and a `+` prefix marks an **exception that beats a block**. That's what lets YouTube block its whole domain and allow watch pages back — see its guide. If a set has a redirect target, make sure that target is itself excepted, or it'll bounce in a loop._
+  ⚠️ **Path blocking only works where the feed has its own URL.** Where a feed shares a page with something you're keeping — Instagram's Explore and its search box are literally the same page — a path block takes both. Those cases are handled with page-scoped cosmetic rules in 4.2 instead; the site guide says which applies.
 
 **4.4 Test each site.**
 - ☐ Open each site → **feed is gone**, but the kept part (DMs / messaging / jobs) still works. ✅
@@ -227,7 +228,8 @@ If keeping the useful part of a site turns out to be the crack that lets you bac
 - **iPhone: blocked in Safari but not Chrome/Arc?** The filter is system-wide — make sure Content & Privacy Restrictions (2.2) is actually ON.
 - **Mac: a feed came back (Part 4)?** That site changed its HTML. Open the page, right-click the feed → Inspect, find the container element, and update that site's cosmetic selector in its guide. This is the built-in cost of the cosmetic approach — it needs the occasional tweak. (Path-blocked feeds like LinkedIn's `/feed/` don't have this problem.)
 - **Mac: a page bounces back and forth forever?** A LeechBlock set whose "redirect to" target is itself blocked. Add that target as a `+` exception in the same set (e.g. `+youtube.com/feed/subscriptions`).
-- **Mac: something you meant to keep hits the block page (Instagram search, a YouTube channel)?** A `+` exception is missing or its path changed. Copy the URL from the address bar and add its path as a new `+` line in that block set.
+- **Mac: something you meant to keep hits the block page (a YouTube channel, a playlist)?** A `+` exception is missing or its path changed. Copy the URL from the address bar and add its path as a new `+` line in that block set.
+- **Mac: a cosmetic rule ate something you wanted (Instagram's search box, a profile's posts)?** The selector is matching too far up the tree, or it isn't page-scoped. Prefer `:has(> a…)` (direct child) over `:has(a…)`, and scope the rule to one page — AdGuard `[$path=/regex/]`, uBO `:matches-path(/regex/)`.
 - **Mac: a kept part stopped working (DMs / messaging / jobs)?** You probably applied a whole-domain block (URLBlocklist / NextDNS / hosts) to your Part 4 browser, or path-blocked a "keep reachable" URL. Remove the whole-domain block from that one browser; re-check the guide's "keep reachable" list.
 - **Locked too early and something's broken?** Your partner unlocks with the code, you fix it, they re-lock. (This is why Part 6 comes last.)
 

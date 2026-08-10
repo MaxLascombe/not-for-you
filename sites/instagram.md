@@ -6,9 +6,21 @@ The site-specific values to plug into the method in the [main README](../README.
 
 - **iPhone (Tier 1):** everything — Instagram is fully dark.
 - **Mac (Tier 2):** kill the **feed, Reels, and the Explore grid**; keep **DMs** (`/direct`) **and search**.
-  Instagram's feed lives at the site **root** (`instagram.com/`), so it can't be path-blocked without taking DMs with it — it needs **cosmetic hiding**.
+  Instagram resists path blocking harder than any other site here. Its feed lives at the site **root** (`instagram.com/`), so blocking that path takes DMs with it; its Explore grid shares a page with search, so blocking *that* path takes search. Both therefore need **cosmetic hiding**, and only Reels — which has a URL of its own — gets path-blocked.
 
-**On keeping search:** yes, and the split is cleaner than it looks. Instagram bundles two different things under one icon — **search** (you type a name, you get that person) and **Explore** (a grid of posts from strangers, picked by the algorithm). They're separate surfaces: Explore is a page you navigate to at `/explore/`, while search is an **overlay panel** that opens over whatever page you're already on and doesn't navigate anywhere until you click a result. So blocking the `/explore/` page leaves the search panel fully working — you can open Instagram on your DMs, hit search, find an account, and go straight to their profile, never touching the grid.
+**On keeping search — why this site needs a different tool.** Search and Explore are **the same page**. You go to `/explore/`, and before you type anything it shows the algorithmic grid of posts from strangers; once you type, the same page shows your results. There's no separate search URL to allow and no explore URL to block.
+
+That kills the path-blocking approach outright: block `/explore/` and you block the search box along with the grid. So Instagram's Explore is handled **entirely with cosmetic rules** — the page stays reachable, and we delete its *contents* while leaving the search field standing.
+
+The distinction that makes it surgical is **what each state actually renders**:
+
+| On `/explore/` | What it is | Verdict |
+|---|---|---|
+| Search field, recent searches | Search | **Keep** |
+| Grid of post / reel thumbnails | The algorithmic Explore feed | **Hide** |
+| Rows of accounts and hashtags | Search results | **Keep** |
+
+Explore is a **grid of post thumbnails**; results are **rows of accounts**. Those are different elements, so a rule that hides post thumbnails on that one page removes the discovery grid and leaves search — field, recents, and results — completely intact.
 
 ## Part 2 — iPhone website block (NEVER ALLOW list)
 
@@ -22,38 +34,51 @@ Add both:
 
 ## Part 4 — Mac feed-killer
 
-**Cosmetic filters** (AdGuard / uBO user rules) — hide the home feed and the Explore/Reels nav:
+**Cosmetic filters** (AdGuard / uBO user rules) — the home feed and the Reels nav:
 ```
 www.instagram.com##main[role="main"] > div:has(article)
-www.instagram.com##a[href="/explore/"]
 www.instagram.com##a[href^="/reels/"]
 ```
 
-_The `a[href="/explore/"]` rule hides the **Explore** link in the nav. The **Search** item above it is a separate button that opens the search panel — it isn't an `/explore/` link, so it survives untouched. That's the whole trick: one nav entry goes, the other stays._
+⚠️ **Do not hide `a[href="/explore/"]`.** An earlier version of this guide did — but that nav link is now your route to the search box. Hiding it hides search. (If your window is wide enough that the sidebar shows a *separate* Search item alongside Explore, then hiding the Explore link is safe and worth doing.)
 
-**Path blocks** (LeechBlock NG) — kill the Reels player and the Explore grid, while letting search results through:
+**Explore-grid rules — page-scoped, so they only fire on `/explore/`.** Both extensions can restrict a cosmetic rule to one URL; the syntax differs, so use the block for the extension you installed in 4.1.
+
+**AdGuard** (Chrome / Arc) — the `[$path=…]` prefix:
+```
+[$path=/^\/explore\/?(\?|$)/]www.instagram.com##div:has(> a[href^="/p/"])
+[$path=/^\/explore\/?(\?|$)/]www.instagram.com##div:has(> a[href^="/reel/"])
+```
+
+**uBO** (Firefox) — the `:matches-path()` operator, same regex:
+```
+www.instagram.com##div:has(> a[href^="/p/"]):matches-path(/^\/explore\/?(\?|$)/)
+www.instagram.com##div:has(> a[href^="/reel/"]):matches-path(/^\/explore\/?(\?|$)/)
+```
+
+Reading the rule: `div:has(> a[href^="/p/"])` is "a div whose **direct child** is a link to a post" — that's one thumbnail tile. The `>` matters. Without it, the selector also matches every *ancestor* that contains a post link anywhere inside, which walks up the tree and takes the search field down with it.
+
+Reading the scope: the regex matches `/explore`, `/explore/`, and `/explore/?anything`, but **not** `/explore/tags/…`. Both extensions match the query string as well as the path, hence the `(\?|$)`. So hashtag pages keep their grids — they're a search result you asked for, not a feed handed to you. If you'd rather kill those too, widen the regex to `/^\/explore/`.
+
+This holds up whether or not your results change the URL. If Instagram navigates to a distinct results URL, the scope excludes it. If it renders results in place at `/explore/`, the rules still only remove *post thumbnails*, so account and hashtag rows show through. Either way search survives — which is the reason the rule targets tiles rather than the container they sit in.
+
+**Path blocks** (LeechBlock NG) — Reels only:
 ```
 instagram.com/reels
-instagram.com/explore
-+instagram.com/explore/search
-+instagram.com/explore/tags
-+instagram.com/explore/locations
 ```
-Set this block set's **"Redirect to this URL instead"** to `https://www.instagram.com/direct/inbox/` — so a stray Explore click drops you in your DMs rather than on a block page.
+Set this block set's **"Redirect to this URL instead"** to `https://www.instagram.com/direct/inbox/`, so a stray Reels click drops you in your DMs rather than on a block page. LeechBlock matches by **prefix**, so `instagram.com/reels` already covers `/reels/anything` — the old `/*` variants aren't needed.
 
-Why the `+` lines: LeechBlock matches by **prefix**, so a bare `instagram.com/explore` would swallow search results too — they live *under* `/explore/`. A `+` marks an exception, and exceptions beat blocks, so those three paths stay reachable while the `/explore/` grid itself does not. (Prefix matching also means you don't need the old `/*` variants — `instagram.com/reels` already covers `/reels/anything`.)
+⚠️ **Do not path-block `instagram.com/explore`.** That's the whole point of this section: search lives there. The grid is handled cosmetically above.
 
-⚠️ **Verify the search paths rather than trusting them.** Instagram doesn't document these URLs and reshuffles them without warning; the three above are the shapes as of writing. In your 4.4 test, run a real search, press Enter for the full-results page, and open a hashtag. If either lands on the block page, copy the URL from the address bar and add its path as another `+` line.
+Leave `instagram.com/direct` out of the block list too — that's DMs.
 
-Leave `instagram.com/direct` **out** of the block list entirely — that's DMs.
+_Instagram reshuffles its markup often. Both the feed rule (`article`) and the tile rules (`a[href^="/p/"]`) are guesses about its current DOM. If either stops working, right-click the thing you want gone → Inspect, and check what its direct parent actually is._
 
-_Instagram reshuffles its markup often. If the feed reappears, right-click it → Inspect and update the `article` selector above._
+_If the hidden tiles leave a page of blank gaps, the grid is reserving space for rows that are now empty. Move one level up — `div:has(> div > a[href^="/p/"])` — to take the row with them._
 
-_If **search results** ever come back empty-looking, suspect the feed rule rather than the path blocks: `main[role="main"] > div:has(article)` is unscoped, so it fires on every page, and it would hide a results grid that happens to use `article` too. On AdGuard you can pin it to the site root only by prefixing the rule with `[$path=/^\/$/]`. uBO has no `$path` equivalent — there, drop the rule and rely on the redirect instead._
+**Keep reachable** (do NOT block): `/direct` (DMs), `/explore/` itself (search), `/explore/tags/…`, and profile pages.
 
-**Keep reachable** (do NOT block): `/direct` (DMs), the search panel, `/explore/search`, `/explore/tags`, and profile pages.
-
-**4.4 test for this site:** open Instagram → **no feed**, DMs work. ✅ Click **Search**, type a name → the panel returns results, clicking one opens the profile. ✅ Try `/explore/` directly → bounced to your DM inbox. ✅
+**4.4 test for this site:** open Instagram → **no feed**, DMs work. ✅ Go to **Explore/Search** → the search field is there and the grid below it is **gone**. ✅ Type a name → results appear and clicking one opens the profile. ✅ Open a profile → their posts still show (proving the tile rule stayed scoped to `/explore/`). ✅
 
 ## Part 5 — whole-domain values (for browsers you DON'T use for Instagram)
 
