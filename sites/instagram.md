@@ -72,7 +72,29 @@ Set this block set's **"Redirect to this URL instead"** to `https://www.instagra
 
 Leave `instagram.com/direct` out of the block list too — that's DMs.
 
-_Instagram reshuffles its markup often. Both the feed rule (`article`) and the tile rules (`a[href^="/p/"]`) are guesses about its current DOM. If either stops working, right-click the thing you want gone → Inspect, and check what its direct parent actually is._
+_Instagram reshuffles its markup often. Both the feed rule (`article`) and the tile rules (`a[href^="/p/"]`) are written against its structure as of this guide, and Explore is behind a login wall, so they can't be verified from outside your own session._
+
+### Deriving the exact selector yourself (30 seconds)
+
+Instagram's Explore is login-walled, so the only place its real markup exists is your logged-in browser. Rather than guess when a rule misfires, read it directly: open `instagram.com/explore/`, press **⌥⌘J** for the console, and paste:
+
+```js
+(() => {
+  const a = document.querySelector('main a[href^="/p/"], main a[href^="/reel/"]');
+  if (!a) return 'No post tiles found — is the grid actually on screen?';
+  const chain = []; let el = a;
+  for (let i = 0; i < 6 && el; i++, el = el.parentElement) {
+    const cls = typeof el.className === 'string' && el.className.trim()
+      ? '.' + el.className.trim().split(/\s+/).join('.') : '';
+    chain.push(`${i === 0 ? 'TILE ' : `parent ${i}: `}${el.tagName.toLowerCase()}${cls}`);
+  }
+  return { path: location.pathname + location.search, tile: a.getAttribute('href'), chain };
+})()
+```
+
+It prints the tile link and its ancestor chain. `parent 1` is what `div:has(> a[href^="/p/"])` targets — if that isn't a single thumbnail, use the level that is. Then **type a search and run it again**: if `path` changes, your results live at their own URL and the page scope already excludes them; if it stays `/explore/`, the tile-level rule is what's keeping your results visible, so don't widen it to a container.
+
+_Instagram's class names are machine-generated and change between deploys — read them as "which level am I at," never as something to paste into a rule._
 
 _If the hidden tiles leave a page of blank gaps, the grid is reserving space for rows that are now empty. Move one level up — `div:has(> div > a[href^="/p/"])` — to take the row with them._
 
