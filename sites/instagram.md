@@ -58,9 +58,28 @@ www.instagram.com##div:has(> a[href^="/reel/"]):matches-path(/^\/explore\/?(\?|$
 
 Reading the rule: `div:has(> a[href^="/p/"])` is "a div whose **direct child** is a link to a post" — that's one thumbnail tile. The `>` matters. Without it, the selector also matches every *ancestor* that contains a post link anywhere inside, which walks up the tree and takes the search field down with it.
 
+**Verified against the live DOM (2026-08-11).** Reading Explore while logged in confirmed both halves of the design:
+
+- A tile is an `<a href="/p/…">` whose **direct parent is a `div`** — so `div:has(> a[href^="/p/"])` matches, at exactly one thumbnail. Ancestors go: `a` → `div.html-div…` (tile) → `div.xeuugli x6ikm8r…` (cell) → `div.x121lspk…` (row).
+- **Once you type a search, the page contains no `/p/` links at all.** Results are accounts and hashtags, not post thumbnails. So these rules physically cannot hide your search results — there's nothing there for them to match.
+
+That second point is the load-bearing one. It's why hiding at the *tile* level is safe, and why widening the rule to a big container would be the thing that breaks search.
+
+**If hidden tiles leave blank gaps**, climb one rung at a time — each adds one `> div` and each was confirmed present:
+
+| Level | Selector | Hides |
+|---|---|---|
+| Tile *(start here)* | `div:has(> a[href^="/p/"])` | one thumbnail |
+| Cell | `div:has(> div > a[href^="/p/"])` | the thumbnail's cell |
+| Row | `div:has(> div > div > a[href^="/p/"])` | the whole row, no gap left |
+
+_The `x…` class names above are machine-generated and change between deploys — they're recorded to show which level is which, not to be pasted into a rule. The tile link also carried a `_a6hd` class; Instagram's underscore classes churn less than the `x…` ones, so `a._a6hd` is a last-resort anchor if href matching ever stops working._
+
 Reading the scope: the regex matches `/explore`, `/explore/`, and `/explore/?anything`, but **not** `/explore/tags/…`. Both extensions match the query string as well as the path, hence the `(\?|$)`. So hashtag pages keep their grids — they're a search result you asked for, not a feed handed to you. If you'd rather kill those too, widen the regex to `/^\/explore/`.
 
-This holds up whether or not your results change the URL. If Instagram navigates to a distinct results URL, the scope excludes it. If it renders results in place at `/explore/`, the rules still only remove *post thumbnails*, so account and hashtag rows show through. Either way search survives — which is the reason the rule targets tiles rather than the container they sit in.
+This holds up whether or not your results change the URL — which is deliberate, because that turned out to be the one thing the DOM check *didn't* settle. If Instagram navigates to a distinct results URL, the page scope excludes it. If it renders results in place at `/explore/`, the scope applies but finds no post tiles to hide. Search survives on both branches, so the question stops mattering.
+
+So why keep the page scope at all, if results have no tiles to hide? Because **profile pages and hashtag pages are full of `/p/` links** — they're post grids too. Unscoped, these rules would blank every profile you visit. The scope is what confines them to Explore.
 
 **Path blocks** (LeechBlock NG) — Reels only:
 ```
@@ -72,31 +91,32 @@ Set this block set's **"Redirect to this URL instead"** to `https://www.instagra
 
 Leave `instagram.com/direct` out of the block list too — that's DMs.
 
-_Instagram reshuffles its markup often. Both the feed rule (`article`) and the tile rules (`a[href^="/p/"]`) are written against its structure as of this guide, and Explore is behind a login wall, so they can't be verified from outside your own session._
+_The tile rules were checked against the live DOM on 2026-08-11 (see above); the home-feed rule (`article`) hasn't been re-checked since. Instagram reshuffles its markup often, and Explore is login-walled — so when something breaks, don't guess, re-run the probe below in your own session._
 
 ### Deriving the exact selector yourself (30 seconds)
 
-Instagram's Explore is login-walled, so the only place its real markup exists is your logged-in browser. Rather than guess when a rule misfires, read it directly: open `instagram.com/explore/`, press **⌥⌘J** for the console, and paste:
+Open `instagram.com/explore/`, press **⌥⌘J** for the console, and paste:
 
 ```js
 (() => {
   const a = document.querySelector('main a[href^="/p/"], main a[href^="/reel/"]');
-  if (!a) return 'No post tiles found — is the grid actually on screen?';
+  const path = location.pathname + location.search;
+  if (!a) return { path, tiles: 'none — expected once you have typed a search' };
   const chain = []; let el = a;
   for (let i = 0; i < 6 && el; i++, el = el.parentElement) {
     const cls = typeof el.className === 'string' && el.className.trim()
       ? '.' + el.className.trim().split(/\s+/).join('.') : '';
     chain.push(`${i === 0 ? 'TILE ' : `parent ${i}: `}${el.tagName.toLowerCase()}${cls}`);
   }
-  return { path: location.pathname + location.search, tile: a.getAttribute('href'), chain };
+  return { path, tile: a.getAttribute('href'), chain };
 })()
 ```
 
-It prints the tile link and its ancestor chain. `parent 1` is what `div:has(> a[href^="/p/"])` targets — if that isn't a single thumbnail, use the level that is. Then **type a search and run it again**: if `path` changes, your results live at their own URL and the page scope already excludes them; if it stays `/explore/`, the tile-level rule is what's keeping your results visible, so don't widen it to a container.
+It prints the tile link and its ancestor chain. `parent 1` is what `div:has(> a[href^="/p/"])` targets — if that isn't a single thumbnail, climb the ladder above until it is.
+
+Then **type a search and run it again**. Expect `tiles: none` — that's the healthy answer, and the check that matters: it proves results contain nothing these rules can hide. If instead you get a chain back, results now render as post tiles too and the rules would swallow them, so tighten the scope before trusting the setup. The `path` it reports on that second run also tells you whether results get their own URL.
 
 _Instagram's class names are machine-generated and change between deploys — read them as "which level am I at," never as something to paste into a rule._
-
-_If the hidden tiles leave a page of blank gaps, the grid is reserving space for rows that are now empty. Move one level up — `div:has(> div > a[href^="/p/"])` — to take the row with them._
 
 **Keep reachable** (do NOT block): `/direct` (DMs), `/explore/` itself (search), `/explore/tags/…`, and profile pages.
 
